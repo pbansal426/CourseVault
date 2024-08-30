@@ -1,9 +1,24 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
+<style>
+    .box{
+        background-color: lightblue;
+        border: black;
+        min-height: 50px;
+        font-size: 2rem;
+    }
+</style>
 
-<figure class="text-center">
+<!-- <figure class="text-center">
 <h1 class="display-5">Welcome to: <strong>The Course Vault</strong></h1>
-</figure>
+</figure> -->
+
+<div class="row">
+    
+    <div class="col-8"><div class="box"></div></div>
+    <div class="col-4"><div class="box"></div></div>
+    
+</div>
 
 
 {% endblock %}
