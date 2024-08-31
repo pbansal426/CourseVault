@@ -10,6 +10,20 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/login")
 def login():
+    if request.method=="POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        user = User.query.filter_by(email=email).first()
+        if user:
+            if check_password_hash(user.password, password):
+                flash('Logged in successfully!', category='success')
+                login_user(user, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash('Incorrect password, try again.', category='error')
+        else:
+            flash('Email does not exist.', category='error')
+
     return render_template("login.html")
 
 
@@ -45,10 +59,9 @@ def signup():
         password2 = request.form.get("password2")
         question = request.form.get("question")
         answer = request.form.get("answer")
-
+        is_student = request.form.get("is-student")!=None
         user = User.query.filter_by(email=email).first()
         if user:
-            print(email)
             flash("Email already exists.", category="error")
         elif len(email) < 4:
             
@@ -58,16 +71,20 @@ def signup():
         elif len(password1) < 7:
             flash("Password must be at least 7 characters.", category="error")
         else:
+            print(is_student)
             new_user = User(
                 email=email,
                 password=generate_password_hash(
                 password1),
-                question=question,answer=answer
+                question=question,
+                answer=answer,
+                is_student = is_student,is_active=False
             )
-            print(new_user)
+            
             db.session.add(new_user)
             db.session.commit()
-            #login_user(new_user, remember=True)
+            
+            login_user(new_user, remember=True)
             flash("Account created!", category="success")
             
             return redirect(url_for("views.home"))

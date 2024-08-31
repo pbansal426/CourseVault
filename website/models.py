@@ -17,7 +17,9 @@ class User(db.Model):
     question = db.Column(db.String(150000))
     answer = db.Column(db.String(100000))
     is_student = db.Column(db.Boolean)
-    
+    is_active = db.Column(db.Boolean)
+    def __repr__(self):
+        return User(f"{email}, {question}, {answer}")
     
 
     
