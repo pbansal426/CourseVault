@@ -1,6 +1,55 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-    %}
-    
+%}
 
-    
-    {% endblock %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">School Registration</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label for="schoolName" class="form-label">School Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="schoolName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">ZIP Code</label>
+              <input class="form-control" type="number" pattern="[0-9]{5}" title="ZIP Code" />
+
+            </div>
+            <div class="mb-3">
+              <label for="contactName" class="form-label">Contact Name</label>
+              <input
+                type="text"
+                class="form-control"
+                id="contactName"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="contactEmail" class="form-label"
+                >Contact Email</label
+              >
+              <input
+                type="email"
+                class="form-control"
+                id="contactEmail"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
