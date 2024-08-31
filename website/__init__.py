@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail, Message
+
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -10,14 +10,7 @@ DB_NAME = "database.db"
 def create_app():
     app = Flask(__name__)
 
-    app.config['MAIL_SERVER']='smtp.gmail.com'
-    app.config['MAIL_PORT']=465
-    app.config['MAIL_USERNAME']='coursevaultmail@gmail.com'
-    app.config['MAIL_PASSWORD']="cvp101010"
-    app.config['MAIL_USE_TLS'] =False
-    app.config['MAIL_USE_SSL']=True
-    global mail
-    mail= Mail(app)
+    
 
 
 

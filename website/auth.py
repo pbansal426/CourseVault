@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for, request
-from . import mail
+
 
 auth = Blueprint("auth",__name__)
 
