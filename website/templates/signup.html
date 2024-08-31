@@ -3,7 +3,7 @@
 
 
 
-<div class="container mt-5">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col text-center p-3">
             <h4>Registering as a school?</h5>
@@ -16,24 +16,28 @@
                     <h4 class="card-title text-center">Create an Account</h5>
                 </div>
                 <div class="card-body">
-                    <form>  
+                    <form method="POST">  
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Must be unique"required>
                         </div>
                         
                         <div class="mb-3">
-                            <label   for="password" class="form-label">Create Password</label>
-                            <input type="password" class="form-control" id="password"   required>
+                            <label   for="password1" class="form-label">Create Password</label>
+                            <input type="password" class="form-control" id="password1" placeholder="Must contain at least 7 characters" name="password1" required>
                         </div>
                         <div class="mb-3">
-                            <label   for="c_password" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="c_password"   required>
+                            <label   for="password2" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="password2" name="password2" placeholder="Must match password above" required>
                         </div>
                         <div class="mb-3">
-                            <label   for="security" class="form-label">Security Question</label>
-                            <input type="text" class="form-control" id="security"   required>
+                            <label   for="question" class="form-label">Security Question</label>
+                            <input type="text" class="form-control" id="question" name="question" placeholder="Ask a question only you know the answer to."required>
+                        </div>
+                        <div class="mb-3">
+                            <label   for="answer" class="form-label">Answer to security question</label>
+                            <input type="text" class="form-control" id="answer" name="answer" placeholder="Keep it simple. Try not to use punctuation" required>
                         </div>
                         <div class="form-check my-1">
                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
@@ -41,7 +45,9 @@
                                 I am registering as a student.
                             </label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Login</button>  
+                        <button type="submit" class="btn btn-primary">
+Sign Up
+                        </button>  
 
                     </form>
                 </div>
