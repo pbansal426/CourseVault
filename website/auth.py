@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, url_for, request
+from . import mail
 
 auth = Blueprint("auth",__name__)
 
@@ -11,3 +12,11 @@ def login():
 @auth.route("/signup")
 def signup():
     return render_template("signup.html")
+
+@auth.route("/forgotpassword", methods=["GET","POST"])
+def forgotpassword():
+    return render_template("forgotpassword.html")
+
+@auth.route("/schoolsignup")
+def schoolsignup():
+    return render_template("schoolsignup.html")

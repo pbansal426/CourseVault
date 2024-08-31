@@ -1,9 +1,40 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-    %}
-    
-    
-    
-login
-    
-    {% endblock %}
-    
+%}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col text-center p-3">
+            <h4>Forgot you password?</h5>
+                Click <a href="{{url_for('auth.forgotpassword')}}">here</a> to reset it.
+
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div   class="card-header">
+                    <h4 class="card-title text-center">Login</h5>
+                </div>
+                <div class="card-body">
+                    <form>  
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Email</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label   for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password"   required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>  
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col text-center p-3">
+            <h4>Don't have an account?</h5>
+            Click <a href="{{url_for('auth.signup')}}">here</a> to sign-up.
+
+        </div>
+    </div>
+</div>
+{% endblock %}
