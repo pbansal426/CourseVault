@@ -6,8 +6,8 @@ from sqlalchemy.sql import func
 class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10000))
-    zip = db.Column(db.DateTime(timezone=True), default=func.now())
-    contact_name = db.Column(db.String(1000))
+    zip_code = db.Column(db.DateTime(timezone=True), default=func.now())
+
     contact_email=db.Column(db.String(1000))
     
 class User(db.Model, UserMixin):

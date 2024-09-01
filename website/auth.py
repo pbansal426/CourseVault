@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from datetime import timedelta
 import bcrypt
 from .models import User, School
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,16 +10,23 @@ from flask_login import login_user, login_required, logout_user, current_user
 auth = Blueprint("auth", __name__)
 
 
-@auth.route("/login")
+@auth.route("/login", methods=["GET","POST"])
 def login():
-    if request.method=="POST":
+    print("login page")
+    if request.method == "POST":
+        print("init login")
         email = request.form.get("email")
         password = request.form.get("password")
         user = User.query.filter_by(email=email).first()
         if user:
-            if bcrypt.checkpw(password.encode('utf-8'), hash):
+            print("User found")
+            bytes = password.encode('utf-8')
+            check = bcrypt.checkpw(bytes, bcrypt.hashpw(bytes, bcrypt.gensalt()))
+            if check:
+                print("Logged in A")
                 flash('Logged in successfully!', category='success')
-                login_user()
+                login_user(user,remember=True)
+                print("Logged in B")
                 return redirect(url_for('views.home'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -27,6 +35,12 @@ def login():
 
     return render_template("login.html")
 
+
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('auth.login'))
 
 @auth.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -94,15 +108,15 @@ def signup():
             
             return redirect(url_for("views.home"))
 
-    return render_template("signup.html")
+    return render_template("signup.html",current_user=current_user)
 
 
 
 @auth.route("/forgotpassword", methods=["GET", "POST"])
 def forgotpassword():
-    return render_template("forgotpassword.html")
+    return render_template("forgotpassword.html",current_user=current_user)
 
 
 @auth.route("/schoolsignup")
 def schoolsignup():
-    return render_template("schoolsignup.html")
+    return render_template("schoolsignup.html",current_user=current_user)

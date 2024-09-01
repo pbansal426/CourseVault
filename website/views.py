@@ -8,7 +8,7 @@ views = Blueprint("views",__name__)
 def home():
     if current_user.is_authenticated:
         print("auth")
-        return render_template("home.html")
+        return render_template("home.html",current_user=current_user)
     else:
         print("no auth")
-        return render_template("cover.html")
+        return render_template("cover.html",current_user=current_user)
