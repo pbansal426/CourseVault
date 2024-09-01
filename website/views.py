@@ -12,3 +12,13 @@ def home():
     else:
         print("no auth")
         return render_template("cover.html",current_user=current_user)
+    
+
+@views.route("/students-info")
+def students_info():
+    return render_template("students-info.html")
+
+
+@views.route("/add-school")
+def add_school():
+    return render_template("add_school.html")

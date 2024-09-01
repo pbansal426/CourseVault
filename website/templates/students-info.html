@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+    
+    
+    
+    <div class="container">
+        <h1 class="text-center">Unlock Your Future with Free Online Courses</h1>
+        <p class="text-center lead">As a student, your education is our priority.</p>
+    
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Why Choose Our Free Online Courses?</h5>
+                <ul class="list-group list-group-flush gap-1">
+                  <li class="list-group-item">**Flexibility:** Learn at your own pace, anytime, anywhere.</li>
+                  <li class="list-group-item">**Quality:** Our courses are taught by experienced instructors.</li>
+                  <li class="list-group-item">**Variety:** Explore a wide range of subjects and topics.</li>
+                  <li class="list-group-item">**No Hidden Fees:** Enjoy free access to all our online courses.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <div class="mt-5 row justify-content-center">
+          <div class="col-6 text-center">
+            <h5>If you have an account and want to register as a student:</h5>
+            <a href="url_for('views.add_school')" class="btn btn-primary btn-lg btn-block">Add school</a>
+        
+          </div>
+          <div class="col-6 text-center"><h5>If you don't have an account:</h5>
+            <a href="signup.html" class="btn btn-primary btn-lg btn-block">Create an Account</a>
+            <p>Be sure to register as a student.</p>
+        </div>
+          
+        </div>
+      </div>
+    
+    {% endblock %}

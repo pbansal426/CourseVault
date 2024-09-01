@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+    
+    
+<div class="container justify-content-center">
+    <div class="col-8 text-center">
+
+        {% if current_user.is_authenticated %}
+        <form method="POST">
+            need to add search box for registered schools.
+
+        </form>
+        {% else %}
+        
+        <h4>Please <a href="{{url_for('auth.login')}}">login</a> to add a school to your account.</h4>
+        <h4>If you don't have an account, <a href="url_for('auth.signup')">sign up.</a></h4>
+
+        {% endif %}
+    </div>
+</div>
+    {% endblock %}
+    
