@@ -6,9 +6,9 @@ from sqlalchemy.sql import func
 class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10000))
-    zip_code = db.Column(db.DateTime(timezone=True), default=func.now())
+    zip_code = db.Column(db.Integer())
 
-    contact_email=db.Column(db.String(1000))
+    email=db.Column(db.String(1000))
     
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

@@ -117,6 +117,20 @@ def forgotpassword():
     return render_template("forgotpassword.html",current_user=current_user)
 
 
-@auth.route("/schoolsignup")
+@auth.route("/schoolsignup", methods=["GET","POST"])
 def schoolsignup():
+
+
+    if request.method=="POST":
+        name = request.form.get("name").upper()
+        zip_code = request.form.get("zip")
+        email = request.form.get("email")
+        school = School.query.filter_by(name=name).first()
+        if school:
+            flash(f"\"{name}\" has already been signed up.", category="error")
+        else:
+            new_school = School(name=name,zip_code=zip_code,email=email)
+            db.session.add(new_school)
+            db.session.commit()
+            flash(f"\"{name}\" is now registered as a school.", category="success")
     return render_template("schoolsignup.html",current_user=current_user)
