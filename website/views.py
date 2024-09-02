@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for, request
 from flask_login import login_user, login_required, logout_user, current_user
 views = Blueprint("views",__name__)
-
+from .models import School, User
 @login_required
 @views.route("/")
 @views.route("/home")
@@ -21,4 +21,5 @@ def students_info():
 
 @views.route("/add-school")
 def add_school():
-    return render_template("add_school.html")
+    schools = School.query.all()
+    return render_template("add_school.html", schools=schools)

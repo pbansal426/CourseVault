@@ -2,14 +2,39 @@
     %}
     
     
-<div class="container justify-content-center">
-    <div class="col-8 text-center">
+<div class="container justify-content-center row">
+    <div class="col-md-8 text-center border rounded py-3 px-3">
 
         {% if current_user.is_authenticated %}
-        <form method="POST">
-            need to add search box for registered schools.
-
-        </form>
+        
+                <form class="form-inline d-flex gap-1">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-dark btn my-2 my-sm-0" type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                      </button>
+                </form>
+                <div class="my-2">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        
+                        <th scope="col">School</th>
+                        <th scope="col">Zip Code</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for school in schools %}
+                      <tr>
+                        
+                        <td>{{school.name}}</td>
+                        <td>{{school.zip_code}}</td>
+                        
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
         {% else %}
         
         <h4>Please <a href="{{url_for('auth.login')}}">login</a> to add a school to your account.</h4>

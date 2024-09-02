@@ -22,17 +22,22 @@
             </div>
           </div>
         </div>
-    
+    {% if current_user.is_authenticated == False %}
         <div class="mt-5 row justify-content-center">
           <div class="col-6 text-center">
             <h5>If you have an account and want to register as a student:</h5>
-            <a href="url_for('views.add_school')" class="btn btn-primary btn-lg btn-block">Add school</a>
+            <a href="{{url_for('views.add_school')}}" class="btn btn-primary btn-lg btn-block">Add school</a>
         
           </div>
           <div class="col-6 text-center"><h5>If you don't have an account:</h5>
-            <a href="signup.html" class="btn btn-primary btn-lg btn-block">Create an Account</a>
+            <a href="{{url_for('auth.signup')}}" class="btn btn-primary btn-lg btn-block">Create an Account</a>
             <p>Be sure to register as a student.</p>
         </div>
+        {% else %}
+        <div class="text-center p-2">
+        To register as a student, click <a href="{{url_for('views.add_school')}}">here</a>.
+        </div>
+        {% endif %}
           
         </div>
       </div>

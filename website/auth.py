@@ -70,17 +70,21 @@ def signup():
         #     flash('Account created!', category='success')
         #     return redirect(url_for('views.home'))
         email = request.form.get("email")
+        name = request.form.get("name")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
         question = request.form.get("question")
+        
         answer = request.form.get("answer")
         is_student = request.form.get("is-student")!=None
         user = User.query.filter_by(email=email).first()
         if user:
             flash("Email already exists.", category="error")
         elif len(email) < 4:
-            
+        
             flash("Email must be greater than 3 characters.", category="error")
+        elif len(name)<1:
+            flash("Enter a name.")
         elif password1 != password2:
             flash("Passwords don't match.", category="error")
         elif len(password1) < 7:
@@ -96,7 +100,8 @@ def signup():
                 password=hash,
                 question=question,
                 answer=answer,
-                is_student = is_student
+                is_student = is_student,
+                name=name
             )
             
             
@@ -133,4 +138,5 @@ def schoolsignup():
             db.session.add(new_school)
             db.session.commit()
             flash(f"\"{name}\" is now registered as a school.", category="success")
+            return redirect(url_for("views.home"))
     return render_template("schoolsignup.html",current_user=current_user)

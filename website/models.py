@@ -13,11 +13,11 @@ class School(db.Model):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
+    name=db.Column(db.String(1500))
     password = db.Column(db.String(1500))
     question = db.Column(db.String(150000))
     answer = db.Column(db.String(100000))
-    is_student = db.Column(db.Boolean)
-    
+    school = db.Relationship("School")
     
     def __repr__(self):
         return User(f"{email}, {question}, {answer}")
