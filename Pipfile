@@ -9,6 +9,7 @@ flask-login = "*"
 flask-sqlalchemy = "*"
 py-bcrypt = "*"
 
+
 [dev-packages]
 
 [requires]

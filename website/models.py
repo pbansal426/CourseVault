@@ -16,6 +16,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(1500))
     question = db.Column(db.String(150000))
     answer = db.Column(db.String(100000))
-    school = db.Column(db.String(10000))
+    school_id = db.Column(db.String(10000))
     
     

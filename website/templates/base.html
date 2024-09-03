@@ -179,6 +179,18 @@
   </div>
   {% endif %} {% endfor %} {% endif %} {% endwith %}
   <div class="container-fluid p-5">{% block content %} {% endblock %}</div>
+
+  <script>
+    function selectSchool(id) {
+      fetch("{{url_for('ajax.select_school')}}", {
+        method: "POST",
+        body: JSON.stringify({ id: id }),
+      }).then((_res) => {
+        window.location.href = "{{url_for('views.home')}}";
+      });
+    }
+
+  </script>
 </body>
 
 </html>

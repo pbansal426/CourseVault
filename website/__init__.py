@@ -2,14 +2,17 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
+
 db = SQLAlchemy()
 DB_NAME = "database.db"
 
 
 
 def create_app():
+    
     app = Flask(__name__)
-
+   
+    
     
 
 
@@ -21,9 +24,11 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from .ajax import ajax
 
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
+    app.register_blueprint(ajax, url_prefix="/")
 
     from .models import User, School
 
