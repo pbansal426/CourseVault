@@ -20,6 +20,7 @@
                         
                         <th scope="col">School</th>
                         <th scope="col">Zip Code</th>
+                        <th></th>
                         
                       </tr>
                     </thead>
@@ -29,7 +30,8 @@
                         
                         <td>{{school.name}}</td>
                         <td>{{school.zip_code}}</td>
-                        
+                        <td><button class="btn btn-sm btn-primary" id="{{school.id}}" name="add_school_button">Select</button></td>
+                         
                       </tr>
                       {% endfor %}
                     </tbody>
@@ -43,5 +45,32 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+var addSchoolButtonList = document.querySelectorAll("add_school_button");
+var i = 0, length = buttons.length;
+for (i; i < length; i++) {
+  if (document.addEventListener) {
+      buttons[i].addEventListener("click", function() {
+          addSchoolFunc(this.id)
+      });
+  } else {
+      buttons[i].attachEvent("onclick", function() {
+          addSchoolFunc(buttons[i].id)
+      });
+  };
+};
+function addSchoolFunc(id){
+  $.ajax({
+    type: 'POST',
+    url: "{{url_for('ajax.select_school')}}",
+    data: {student_id: id},
+    dataType: "text",
+    success: function(data){
+               alert("You have added the school to your account");
+             }
+  });
+}
+</script>
     {% endblock %}
     

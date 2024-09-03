@@ -100,7 +100,6 @@ def signup():
                 password=hash,
                 question=question,
                 answer=answer,
-                is_student = is_student,
                 name=name
             )
             

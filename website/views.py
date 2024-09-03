@@ -1,7 +1,11 @@
 from flask import Blueprint, render_template, url_for, request
 from flask_login import login_user, login_required, logout_user, current_user
-views = Blueprint("views",__name__)
 from .models import School, User
+
+views = Blueprint("views",__name__)
+
+
+
 @login_required
 @views.route("/")
 @views.route("/home")

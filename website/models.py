@@ -7,7 +7,6 @@ class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10000))
     zip_code = db.Column(db.Integer())
-
     email=db.Column(db.String(1000))
     
 class User(db.Model, UserMixin):
@@ -17,9 +16,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(1500))
     question = db.Column(db.String(150000))
     answer = db.Column(db.String(100000))
-    school = db.Relationship("School")
+    school = db.Column(db.String(10000))
     
-    def __repr__(self):
-        return User(f"{email}, {question}, {answer}")
-
     
