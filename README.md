@@ -11,19 +11,24 @@ CSS
 AI (for code help)
 SQL (for user data)
 
-System requirements:
-A working browser
 
 
+***THIS PROJECT IS STILL IN DEVELOPMENT***
 
-Plan:
-Set up flask app by september 1
-Create a dummy course (or two)
-Account setup (email address, password, school name for free content)
-Ui for course searching and viewing
-Access to more resources
-forum/q and a
+Development plan/structure:
 
+This website provides online courses. Any one can create/upload their courses to this platform.
+
+Schools:
+School admins can sign up their school by entering the school name, zip code and contact info.
+
+Students: 
+Students can choose their school from the database/list in order to register as a student
+Students that have done this get courses for free.
+
+Courses:
+I will create a sample course for testing, and it will contain the usual course content: Chapters, videos, a forum, and description per video. However I am planning to add a assisstant AI to help learners learn. The AI will be trained by the course creator and can help the student with course content.
+I might use OLLAMA, or an OPEN-AI API-Link
 
 
 
