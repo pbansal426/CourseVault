@@ -70,6 +70,7 @@ def signup():
         #     flash('Account created!', category='success')
         #     return redirect(url_for('views.home'))
         email = request.form.get("email")
+        email=email.lower()
         name = request.form.get("name")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
@@ -118,7 +119,15 @@ def signup():
 
 @auth.route("/forgotpassword", methods=["GET", "POST"])
 def forgotpassword():
+    if request.method=="POST":
+        email=request.form.get("email").lower()
+        user = User.query.filter_by(email=email).first
+        if user:
+            return render_template("securityquestion.html",current_user=user)
+        else:
+            flash(f"{email} is not registered. Please login to create an account.",category="error")
     return render_template("forgotpassword.html",current_user=current_user)
+
 
 
 @auth.route("/schoolsignup", methods=["GET","POST"])
