@@ -1,19 +1,19 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
-%}
+{% extends "base.html" %} 
+
+{% block title %}Become an Instructor{% endblock %} 
 
 
 
-<div class="container p-5">
-    <div class="row justify-content-center">
-        <div class="col text-center p-3">
-            <h4>Want to sign up as an instructor?</h5>
-            Click <a href="{{url_for('auth.instructor_signup')}}">here</a>
 
-        </div>
-        <div class="col-md-8">
+{% block content %}
+  <div class="container p-5">
+
+    <div class="justify-content-center text-center"></div>
+        
+        <div class="">
             <div class="card">
                 <div   class="card-header">
-                    <h4 class="card-title text-center">Create an Account</h5>
+                    <h4 class="card-title text-center">Become an Instructor</h5>
                 </div>
                 <div class="card-body">
                     <form method="POST">  
@@ -43,26 +43,22 @@
                             <label   for="answer" class="form-label">Answer to security question</label>
                             <input type="text" class="form-control" id="answer" name="answer" placeholder="Keep it simple. Try not to use punctuation" required>
                         </div>
-                        <div class="form-check my-1">
-                            <input class="form-check-input" type="checkbox" value="check" id="flexCheckDefault" name="is-student">
-                            <label class="form-check-label" for="flexCheckDefault" value="check">
-                                I am registering as a student.
-                            </label>
+                        <div class="mb-3">
+                            <label   for="resume" class="form-label text-primary">Tell us about yourself</label>
+                            <textarea type="text" class="form-control" id="answer" name="resume" placeholder="Job experience, education, expertise, etc." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">
-Sign Up
+                        Sign Up
                         </button>  
 
                     </form>
                 </div>
             </div>
         </div>
-        <div class="col text-center p-3">
-            <h4>Already have an account?</h5>
-            Click <a href="{{url_for('auth.login')}}">here</a> to login.
-
-        </div>
+        
     </div>
+
 </div>
 
 {% endblock %}
+    

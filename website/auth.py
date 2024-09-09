@@ -42,6 +42,19 @@ def logout():
     logout_user()
     return redirect(url_for('views.home'))
 
+@auth.route('/instructor-signup')
+def instructor_signup():
+    if request.method == "POST":
+        email = request.form.get("email")
+        email=email.lower()
+        name = request.form.get("name")
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+        question = request.form.get("question")
+        resume = request.form.get("resume")
+
+    return render_template('instructor_sign_up.html')
+
 @auth.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
@@ -77,7 +90,7 @@ def signup():
         question = request.form.get("question")
         
         answer = request.form.get("answer")
-        is_student = request.form.get("is-student")!=None
+        
         user = User.query.filter_by(email=email).first()
         if user:
             flash("Email already exists.", category="error")
