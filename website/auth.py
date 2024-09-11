@@ -71,7 +71,7 @@ def instructor_signup():
             salt = bcrypt.gensalt()
             hash = bcrypt.hashpw(bytes, salt)
             new_user = Instructor(
-                user_type="instructor",
+                
                 email=email,
                 password=hash,
                 question=question,
@@ -125,7 +125,7 @@ def signup():
         
         answer = request.form.get("answer")
         
-        user = StandardUser.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
             flash("Email already exists.", category="error")
         elif len(email) < 4:
