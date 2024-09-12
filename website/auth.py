@@ -204,6 +204,6 @@ def schoolsignup():
     return render_template("schoolsignup.html",current_user=current_user)
 
 
-@auth.route("/security-question",methods=["POST","GET"])
+@auth.route("/security-question/<str:email>",methods=["POST","GET"])
 def security_question(email):
     return render_template("security_question.html")
