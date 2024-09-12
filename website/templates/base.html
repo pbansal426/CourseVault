@@ -130,9 +130,14 @@
         </ul>
 
         <ul class="navbar-nav ms-auto gap-2">
+          {% if current_user.type == "instructor" %}
+          <li class="nav-item rounded">
+            <a class="nav-link text-light" href="{{url_for('views.upload')}}">Upload a course</a>
+          </li>
+          {% else %}
           <li class="nav-item rounded">
             <a class="nav-link text-light" href="{{url_for('views.students_info')}}">For Students</a>
-          </li>
+          </li>{% endif %}
           <li class="nav-item rounded">
             <a class="nav-link text-light" href="{{url_for('auth.schoolsignup')}}">For Schools</a>
 

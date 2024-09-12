@@ -76,7 +76,8 @@ def instructor_signup():
                 password=hash,
                 question=question,
                 answer=answer,
-                name=name
+                name=name,
+                type="instructor"
             )
             
             
@@ -149,7 +150,8 @@ def signup():
                 password=hash,
                 question=question,
                 answer=answer,
-                name=name
+                name=name,
+                type="standard_user"
             )
             
             

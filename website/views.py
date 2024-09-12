@@ -29,3 +29,7 @@ def students_info():
 def add_school():
     schools = School.query.all()
     return render_template("add_school.html", schools=schools)
+
+@views.route("/upload")
+def upload():
+    return render_template("upload.html", current_user=current_user)
