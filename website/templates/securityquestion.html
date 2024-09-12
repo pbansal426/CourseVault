@@ -9,15 +9,10 @@
               <h5 class="card-title">Forgot Password</h5>
             </div>
             <div class="card-body">
-              <form>
+              <form method="POST">
+                
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control" id="email"   
-    required>
-                </div>
-              
-                <div class="mb-3">
-                  <label for="security-answer" class="form-label">Security Question: {{current_user.question}}</label>
+                  <label for="security-answer" class="form-label">Security Question: {{user.question}}</label>
                   <input type="text" class="form-control" id="security-answer" required>
                 </div>
                 
