@@ -52,7 +52,7 @@ def instructor_signup():
         password2 = request.form.get("password2")
         question = request.form.get("question")
         answer=request.form.get("answer").lower()
-        print(email,name,password1,question)
+        
         resume = request.form.get("resume")
         user = User.query.filter_by(email=email).first()
         if user:
@@ -122,9 +122,9 @@ def signup():
         name = request.form.get("name")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
-        question = request.form.get("question")
+        question = request.form.get("question").capitalize()
         
-        answer = request.form.get("answer")
+        answer = request.form.get("answer").lower()
         
         user = User.query.filter_by(email=email).first()
         if user:
@@ -174,12 +174,13 @@ def forgotpassword():
         
         user = User.query.filter_by(email=email).first()
         
+        print(user.name)
         if user:
             
-
-            return redirect(url_for("auth.security_question",email=email))
+            
+            return redirect(url_for("auth.security_question",id=user.id))
         else:
-            flash(f"{email} is not registered. Please login to create an account.",category="error")
+            flash(f"{email} is not registered. Please signup to create an account.",category="error")
     return render_template("forgotpassword.html",current_user=current_user)
 
 
@@ -204,6 +205,16 @@ def schoolsignup():
     return render_template("schoolsignup.html",current_user=current_user)
 
 
-@auth.route("/security-question/<str:email>",methods=["POST","GET"])
-def security_question(email):
-    return render_template("security_question.html")
+@auth.route("/security-question<int:id>",methods=["POST","GET"])
+def security_question(id):
+    user = User.query.filter_by(id=id).first()
+    if request.method=="POST":
+        answer=request.form.get("answer").lower()
+        if user.answer==answer:
+            flash("You can now reset your password.", category="success")
+        else:
+            flash("You entered the incorrect answer to the question. Please try again.", category = "error")
+
+    
+
+    return render_template("security_question.html",user=user)

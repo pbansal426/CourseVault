@@ -10,10 +10,10 @@
             </div>
             <div class="card-body">
               <form method="POST">
-                
+                Hello, {{user.name}}
                 <div class="mb-3">
                   <label for="security-answer" class="form-label">Security Question: {{user.question}}</label>
-                  <input type="text" class="form-control" id="security-answer" required>
+                  <input type="text" class="form-control" id="security-answer" name="answer" required>
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Reset Password</button>
