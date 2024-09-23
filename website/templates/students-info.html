@@ -29,7 +29,7 @@
         <div class="mt-5 row justify-content-center">
           <div class="col-6 text-center">
             <h5>If you have an account and want to register as a student:</h5>
-            <a href="{{url_for('views.add_school')}}" class="btn btn-primary btn-lg btn-block">Add school</a>
+            <a href="{{url_for('auth.login',future='views.add_school')}}" class="btn btn-primary btn-lg btn-block">Login</a>
         
           </div>
           <div class="col-6 text-center"><h5>If you don't have an account:</h5>

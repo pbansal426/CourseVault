@@ -10,30 +10,33 @@ from flask_login import login_user, login_required, logout_user, current_user
 auth = Blueprint("auth", __name__)
 
 
-@auth.route("/login", methods=["GET","POST"])
-def login():
+@auth.route("/login/<future>", methods=["GET","POST"])
+def login(future):
     print("login page")
     if request.method == "POST":
-        print("init login")
+        
         email = request.form.get("email")
         password = request.form.get("password")
         user = User.query.filter_by(email=email).first()
         if user:
-            print("User found")
+            
             bytes = password.encode('utf-8')
             check = bcrypt.checkpw(bytes, bcrypt.hashpw(bytes, bcrypt.gensalt()))
             if check:
-                print("Logged in A")
+                
                 flash('Logged in successfully!', category='success')
                 login_user(user,remember=True)
-                print("Logged in B")
-                return redirect(url_for('views.home'))
+                
+                return redirect(url_for(str(future)))
             else:
                 flash('Incorrect password, try again.', category='error')
         else:
             flash('Email does not exist.', category='error')
 
+    print(future)
+    
     return render_template("login.html")
+    
 
 
 @auth.route('/logout')
@@ -86,7 +89,8 @@ def instructor_signup():
             
             login_user(new_user, remember=True)
             flash("Account created!", category="success")
-            return redirect(url_for("views.home"))
+            
+            return redirect(url_for("views.home"))  
 
     return render_template('instructor_sign_up.html')
 
@@ -212,6 +216,23 @@ def security_question(id):
         answer=request.form.get("answer").lower()
         if user.answer==answer:
             flash("You can now reset your password.", category="success")
+            return redirect(url_for('auth.reset_pw',id=id))
+        else:
+            flash("You entered the incorrect answer to the question. Please try again.", category = "error")
+
+    
+
+    return render_template("security_question.html",user=user)
+
+@auth.route("/reset-pw/<int:id>",methods=["POST","GET"])
+def reset_pw(id):
+    user = User.query.filter_by(id=id).first()
+    if request.method=="POST":
+        pw1=request.form.get("pw1")
+        pw2=request.form.get("pw2")
+        if pw1!=pw2:
+            flash("Passwords don't match", category="error")
+            
         else:
             flash("You entered the incorrect answer to the question. Please try again.", category = "error")
 

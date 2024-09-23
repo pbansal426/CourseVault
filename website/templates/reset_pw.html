@@ -1,0 +1,28 @@
+{% extends "base.html" %} 
+
+{% block title %}Reset Password{% endblock %} 
+
+<div class="container p-5">
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label for="pw1" class="form-label">New Password</label>
+        <input type="password" class="form-control" id="pw1" name="pw1" placeholder="Enter a password"required>
+    </div>
+    <div class="mb-3">
+        <label for="pw2" class="form-label">Confirm</label>
+        <input type="password" class="form-control" id="pw2" name="pw2" placeholder="Confirm your password"required>
+    </div>
+</form>
+</div>
+
+
+
+
+{% block content %}
+    
+    
+
+{% endblock %}
+    
