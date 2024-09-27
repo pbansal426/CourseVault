@@ -2,10 +2,14 @@
     %}
     <div class="p-5">Hello, {{current_user.name}}
     
-{{current_user}}
+<br>
 
 Type of user: {{current_user.type}}
+    {% if current_user.type == 'student' %}
     
+    {% else %}
+    
+    {% endif %}
     </div>
 {% endblock %}
     

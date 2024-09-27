@@ -32,4 +32,4 @@ class Instructor(User):
 class Student(User):
     __tablename__ = 'student'
     id=db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
-    school = db.Column(db.String(15000))
+    school_id = db.Column(db.Integer())

@@ -5,7 +5,7 @@ from .models import *
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
-
+from .functions import create_user
 
 auth = Blueprint("auth", __name__)
 
@@ -73,15 +73,15 @@ def instructor_signup():
             bytes = password1.encode('utf-8')
             salt = bcrypt.gensalt()
             hash = bcrypt.hashpw(bytes, salt)
-            new_user = Instructor(
-                
+            new_user = create_user(
+
+                type="instructor",
                 email=email,
                 password=hash,
                 question=question,
                 answer=answer,
-                name=name,
-                type="instructor"
-            )
+                name=name
+                )
             
             
             db.session.add(new_user)
@@ -97,30 +97,7 @@ def instructor_signup():
 @auth.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        # email = request.form.get('email')
-        # first_name = request.form.get('firstName')
-        # password1 = request.form.get('password1')
-        # password2 = request.form.get('password2')
-
-        # user = User.query.filter_by(email=email).first()
-        # if user:
-        #     flash('Email already exists.', category='error')
-        # elif len(email) < 4:
-        #     flash('Email must be greater than 3 characters.', category='error')
-        # elif len(first_name) < 2:
-        #     flash('First name must be greater than 1 character.', category='error')
-        # elif password1 != password2:
-        #     flash('Passwords don\'t match.', category='error')
-        # elif len(password1) < 7:
-        #     flash('Password must be at least 7 characters.', category='error')
-        # else:
-        #     new_user = User(email=email, first_name=first_name, password=generate_password_hash(
-        #         password1, method='sha256'))
-        #     db.session.add(new_user)
-        #     db.session.commit()
-        #     login_user(new_user, remember=True)
-        #     flash('Account created!', category='success')
-        #     return redirect(url_for('views.home'))
+        
         email = request.form.get("email")
         email=email.lower()
         name = request.form.get("name")
@@ -148,14 +125,14 @@ def signup():
             salt = bcrypt.gensalt()
             hash = bcrypt.hashpw(bytes, salt) 
             
-            new_user = StandardUser(
-                
+            new_user = create_user(
+                usr_type="standard_user",
                 email=email,
                 password=hash,
                 question=question,
                 answer=answer,
-                name=name,
-                type="standard_user"
+                name=name
+                
             )
             
             

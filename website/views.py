@@ -12,9 +12,8 @@ views = Blueprint("views",__name__)
 def home():
     if current_user.is_authenticated:
 
-        #user_school = School.query.filter_by(id=current_user.school_id).first()
-        print("auth")
-        return render_template("home.html",current_user=current_user,true=isinstance(current_user, Student),true1=isinstance(current_user,Instructor))
+        
+        return render_template("home.html",current_user=current_user)
     else:
         print("no auth")
         return render_template("cover.html",current_user=current_user)
