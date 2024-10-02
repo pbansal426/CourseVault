@@ -6,10 +6,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from .functions import create_user
-
+import re
 auth = Blueprint("auth", __name__)
-
-
+regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 @auth.route("/login/<future>", methods=["GET","POST"])
 def login(future):
     print("login page")
@@ -21,7 +20,7 @@ def login(future):
         if user:
             
             bytes = password.encode('utf-8')
-            check = bcrypt.checkpw(bytes, bcrypt.hashpw(bytes, bcrypt.gensalt()))
+            check = bcrypt.checkpw(bytes, user.password)
             if check:
                 
                 flash('Logged in successfully!', category='success')
@@ -75,7 +74,7 @@ def instructor_signup():
             hash = bcrypt.hashpw(bytes, salt)
             new_user = create_user(
 
-                type="instructor",
+                usr_type="instructor",
                 email=email,
                 password=hash,
                 question=question,
@@ -108,42 +107,47 @@ def signup():
         answer = request.form.get("answer").lower()
         
         user = User.query.filter_by(email=email).first()
-        if user:
-            flash("Email already exists.", category="error")
-        elif len(email) < 4:
-        
-            flash("Email must be greater than 3 characters.", category="error")
-        elif len(name)<1:
-            flash("Enter a name.")
-        elif password1 != password2:
-            flash("Passwords don't match.", category="error")
-        elif len(password1) < 7:
-            flash("Password must be at least 7 characters.", category="error")
-        else:
+        if (re.fullmatch(regex, email)):
             
-            bytes = password1.encode('utf-8')
-            salt = bcrypt.gensalt()
-            hash = bcrypt.hashpw(bytes, salt) 
+            if user:
+                flash("Email already exists.", category="error")
             
-            new_user = create_user(
-                usr_type="standard_user",
-                email=email,
-                password=hash,
-                question=question,
-                answer=answer,
-                name=name
+            
+            elif len(email) < 4:
+            
+                flash("Email must be greater than 3 characters.", category="error")
+            elif len(name)<1:
+                flash("Enter a name.")
+            elif password1 != password2:
+                flash("Passwords don't match.", category="error")
+            elif len(password1) < 7:
+                flash("Password must be at least 7 characters.", category="error")
+            else:
                 
-            )
-            
-            
-            db.session.add(new_user)
-            db.session.commit()
-            
-            login_user(new_user, remember=True)
-            flash("Account created!", category="success")
-            
-            return redirect(url_for("views.home"))
-
+                bytes = password1.encode('utf-8')
+                salt = bcrypt.gensalt()
+                hash = bcrypt.hashpw(bytes, salt) 
+                
+                new_user = create_user(
+                    usr_type="standard_user",
+                    email=email,
+                    password=hash,
+                    question=question,
+                    answer=answer,
+                    name=name
+                    
+                )
+                
+                
+                db.session.add(new_user)
+                db.session.commit()
+                
+                login_user(new_user, remember=True)
+                flash("Account created!", category="success")
+                
+                return redirect(url_for("views.home"))
+        else:
+            flash("Enter a valid email address.", category="error")
     return render_template("signup.html",current_user=current_user)
 
 
@@ -155,7 +159,7 @@ def forgotpassword():
         
         user = User.query.filter_by(email=email).first()
         
-        print(user.name)
+    
         if user:
             
             
@@ -192,16 +196,18 @@ def security_question(id):
     if request.method=="POST":
         answer=request.form.get("answer").lower()
         if user.answer==answer:
-            flash("You can now reset your password.", category="success")
+            
+            print(type(answer))
             return redirect(url_for('auth.reset_pw',id=id))
         else:
-            flash("You entered the incorrect answer to the question. Please try again.", category = "error")
+            print("not equal"+answer+user.answer)
+            flash("You entered the incorrect answer to the question. Please try again????", category = "error")
 
     
 
     return render_template("security_question.html",user=user)
 
-@auth.route("/reset-pw/<int:id>",methods=["POST","GET"])
+@auth.route("/reset_pw<int:id>",methods=["POST","GET"])
 def reset_pw(id):
     user = User.query.filter_by(id=id).first()
     if request.method=="POST":
@@ -211,8 +217,15 @@ def reset_pw(id):
             flash("Passwords don't match", category="error")
             
         else:
-            flash("You entered the incorrect answer to the question. Please try again.", category = "error")
+            bytes = pw1.encode('utf-8')
+            salt = bcrypt.gensalt()
+            hash = bcrypt.hashpw(bytes, salt) 
+            user.password=hash
+            db.session.commit()
+            login_user(user, remember=True)
+            flash("You have reset your password.", category = "success")
+            return redirect(url_for("views.home"))
 
     
 
-    return render_template("security_question.html",user=user)
+    return render_template("reset_pw.html",user=user)

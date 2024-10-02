@@ -15,7 +15,7 @@ def home():
         
         return render_template("home.html",current_user=current_user)
     else:
-        print("no auth")
+        
         return render_template("cover.html",current_user=current_user)
     
 
@@ -26,8 +26,10 @@ def students_info():
 
 @views.route("/add-school")
 def add_school():
-    schools = School.query.all()
-    return render_template("add_school.html", schools=schools)
+    if (current_user.user_type == "standard_user"):
+                
+        schools = School.query.all()
+        return render_template("add_school.html", schools=schools)
 
 @views.route("/upload")
 def upload():

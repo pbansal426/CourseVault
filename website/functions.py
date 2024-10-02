@@ -13,16 +13,18 @@ def select_school():
     school_id = school['id']
     school = School.query.get(school_id)
     
+    current_user.user_type="student"
+    current_user.school=school
     db.session.commit()
     
     return jsonify({})
 
 def create_user(usr_type,**kwargs):
     if (usr_type=="standard_user"):
-        return StandardUser(type=usr_type,**kwargs)
+        return StandardUser(user_type=usr_type,**kwargs)
     elif (usr_type=="instructor"):
-        return Instructor(type=usr_type,**kwargs)
+        return Instructor(user_type=usr_type,**kwargs)
     elif (usr_type=="student"):
-        return Student(type=usr_type,**kwargs)
+        return Student(user_type=usr_type,**kwargs)
     else:
         raise ValueError("Invalid user type")

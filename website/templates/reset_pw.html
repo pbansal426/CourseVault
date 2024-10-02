@@ -1,7 +1,9 @@
 {% extends "base.html" %} 
 
 {% block title %}Reset Password{% endblock %} 
-
+{% block content %}
+    
+    
 <div class="container p-5">
 
 <form method="POST">
@@ -14,15 +16,14 @@
         <label for="pw2" class="form-label">Confirm</label>
         <input type="password" class="form-control" id="pw2" name="pw2" placeholder="Confirm your password"required>
     </div>
+    <button type="submit" class="btn btn-primary">Change Password</button>
 </form>
 </div>
 
 
 
 
-{% block content %}
-    
-    
+
 
 {% endblock %}
     

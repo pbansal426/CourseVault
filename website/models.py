@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(1500))
     question = db.Column(db.String(150000))
     answer = db.Column(db.String(100000))
-    type = db.Column(db.Enum('student', 'instructor', 'standard_user'), nullable=False)
+    user_type = db.Column(db.Enum('student', 'instructor', 'standard_user'), nullable=False)
 
 class StandardUser(User):
     __tablename__ = 'standard_user'
