@@ -34,3 +34,5 @@ def add_school():
 @views.route("/upload")
 def upload():
     return render_template("upload.html", current_user=current_user)
+
+
