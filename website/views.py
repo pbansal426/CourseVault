@@ -31,8 +31,12 @@ def add_school():
         schools = School.query.all()
         return render_template("add_school.html", schools=schools)
 
-@views.route("/upload")
+@login_required
+@views.route("/upload",methods=["POST","GET"])
 def upload():
-    return render_template("upload.html", current_user=current_user)
+    if current_user.user_type != "instructor":
+        flash("You must be an instructor to upload a course.", category="error")
+        return redirect(url_for("views.home"))
+    return render_template("upload_course.html", current_user=current_user)
 
 

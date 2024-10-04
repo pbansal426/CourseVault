@@ -33,3 +33,23 @@ class Student(User):
     __tablename__ = 'student'
     id=db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     school_id = db.Column(db.Integer())
+
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)   
+    description = db.Column(db.Text)
+    instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'))
+    videos = db.relationship('Video', backref='course')
+    def __repr__(self):
+        return f'<Course {self.title}>'
+    
+class Video(db.Model):
+    __tablename__= "video"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    video_url = db.Column(db.String(255))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    def __repr__(self):
+        return f'<Video {self.title}>'
