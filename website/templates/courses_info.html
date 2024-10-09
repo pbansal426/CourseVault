@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+{% block title %}Courses Info{% endblock %} 
+
+
+{% block content %}
+<div class="container p-5">
+{% for course in courses %}
+{{course.name}}
+{{course.description}}
+
+<br><br>
+{% endfor %}
+
+
+</div>    
+    
+
+{% endblock %}
+    

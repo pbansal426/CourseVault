@@ -3,7 +3,7 @@
 
 {% block title %}Upload a Course{% endblock %} {% block content %}
 
-<div class="container p-5">
+<div class="container m-2 p-5">
 
     <form method="POST" enctype="multipart/form-data">
         <div class="mb-3">
@@ -12,7 +12,7 @@
         </div>
         <div class="mb-3">
             <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description"></textarea>
+            <textarea class="form-control" id="description" name="description"></textarea>
   
         </div>
         
@@ -20,12 +20,12 @@
             <div class="videoInput">
                 <label for="videoTitle1">Video Title:</label>
                 <input type="text" name="videoTitle[]" id="videoTitle1">
-                <input type="file" name="videoFiles[]" id="videoFile1">
+                <input type="file" name="videoFiles[]" id="videoFile1" accept="video/*">
                 <button type="button" class="btn btn-primary addVideoButton">Add Video</button>
             </div>
         </div>
         </div>
-        <div class="text-center"><button class="btn btn-primary">Add Video</button>
+        <div class="text-center">
         
         <button class="btn btn-success">Save</button></div>
         
@@ -46,11 +46,13 @@
                 videoInputCount++;
         
                 var newVideoInput = `
+                
                     <div class="videoInput">
+                        <br>
                         <label for="videoTitle${videoInputCount}">Video Title:</label>
                         <input type="text" name="videoTitle[]" id="videoTitle${videoInputCount}">
-                        <input type="file" name="videoFiles[]" id="videoFile${videoInputCount}">
-                        <button type="button" class="btn btn-primary removeVideoButton">Remove Video</button>
+                        <input type="file" name="videoFiles[]" id="videoFile${videoInputCount}" accept="video/*">
+                        <button type="button" class="btn btn-danger removeVideoButton">Remove Video</button>
                     </div>
                 `;
         

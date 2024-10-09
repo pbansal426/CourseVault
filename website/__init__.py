@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-
+from werkzeug.utils import secure_filename
 
 db = SQLAlchemy()
 DB_NAME = "database.db"

@@ -28,6 +28,7 @@ class Instructor(User):
     __tablename__ = 'instructor'
     id=db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     resume=db.Column(db.String(150000000))
+    courses = db.relationship('Course', backref='instructor')
 
 class Student(User):
     __tablename__ = 'student'
