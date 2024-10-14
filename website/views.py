@@ -48,9 +48,21 @@ def upload():
             cover_image = request.files['cover_image']
             video_titles = request.form.getlist('videoTitle[]')
             video_files = request.files.getlist('videoFiles[]')
+
+            
             course = Course(title=title, description=description, instructor_id=current_user.id)
+            course.cover_image_data = base64.b64encode(cover_image.read()).decode('utf-8')
+            
+            
+                
             for video_title, video_file in zip(video_titles, video_files):
-                print(video_title, video_file)
+                video = Video(title=video_title, course=course)
+                video.video_file_data = base64.b64encode(video_file.read()).decode('utf-8')
+                db.session.add(video)
+
+            db.session.add(course)
+            db.session.commit()
+
 
 
             
@@ -63,4 +75,9 @@ def courses_info():
         flash("You must be an instructor make and view courses.",category="error")
         return redirect("views.home")
     courses = Course.query.filter_by(instructor_id=current_user.id).all()
-    return render_template("courses_info.html",current_user=current_user,courses=courses)
+    return render_template("courses_info.html",courses=courses)
+
+
+@views.route("/course")
+def course():
+    return render_template("course.html",current_user=current_user)

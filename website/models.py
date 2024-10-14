@@ -10,7 +10,7 @@ class School(db.Model):
     email=db.Column(db.String(1000))
     
 class User(db.Model, UserMixin):
-    __tablename__ = "users"
+    
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     name=db.Column(db.String(1500))
@@ -24,10 +24,10 @@ class StandardUser(User):
     
 
 class Instructor(User):
-    __tablename__ = 'instructor'
+    
     
     resume=db.Column(db.String(150000000))
-    courses = db.relationship('Course', backref='instructor')
+    courses = db.relationship('Course', backref='taught_by')
 
 class Student(User):
     __tablename__ = 'student'
@@ -40,7 +40,8 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)   
     description = db.Column(db.Text)
-    instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'))
+    instructor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
     videos = db.relationship('Video', backref='course')
     cover = db.Column(db.Text)
     def __repr__(self):
