@@ -15,12 +15,15 @@
             <textarea class="form-control" id="description" name="description"></textarea>
   
         </div>
-        
+        <div class="mb-3">
+            <label for="image">Cover Image:</label>
+            <input type="file" name="cover_image" id="cover_image" accept="image/*" required>
+        </div>
         <div id="videoInputs">
             <div class="videoInput">
                 <label for="videoTitle1">Video Title:</label>
-                <input type="text" name="videoTitle[]" id="videoTitle1">
-                <input type="file" name="videoFiles[]" id="videoFile1" accept="video/*">
+                <input type="text" name="videoTitle[]" id="videoTitle1" required>
+                <input type="file" name="videoFiles[]" id="videoFile1" accept="video/*" required>
                 <button type="button" class="btn btn-primary addVideoButton">Add Video</button>
             </div>
         </div>

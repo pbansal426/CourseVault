@@ -1,7 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
-
+import base64
 
 class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -21,18 +21,17 @@ class User(db.Model, UserMixin):
 
 class StandardUser(User):
     __tablename__ = 'standard_user'
-    id=db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
-
+    
 
 class Instructor(User):
     __tablename__ = 'instructor'
-    id=db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    
     resume=db.Column(db.String(150000000))
     courses = db.relationship('Course', backref='instructor')
 
 class Student(User):
     __tablename__ = 'student'
-    id=db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
+    
     school_id = db.Column(db.Integer())
 
 
@@ -43,14 +42,23 @@ class Course(db.Model):
     description = db.Column(db.Text)
     instructor_id = db.Column(db.Integer, db.ForeignKey('instructor.id'))
     videos = db.relationship('Video', backref='course')
+    cover = db.Column(db.Text)
     def __repr__(self):
         return f'<Course {self.title}>'
     
 class Video(db.Model):
-    __tablename__= "video"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    video_url = db.Column(db.String(255))
+    file = db.Column(db.String(255))
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    
     def __repr__(self):
         return f'<Video {self.title}>'
+    
+
+class CoverImage(db.Model):
+    __tablename__="cover_image"
+    id = db.Column(db.Integer,primary_key=True)
+    data = db.Column(db.Text)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
+    course = db.relationship('Course', backref='image')

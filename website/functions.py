@@ -5,6 +5,18 @@ from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .functions import *
 functions = Blueprint("functions", __name__)
+import base64
+from flask_sqlalchemy import SQLAlchemy
+from PIL import Image
+
+def save_image(image_file):
+    # Convert image to base64 string
+    base64_string = base64.b64encode(image_file.read()).decode('utf-8')
+
+    # Create an Image instance and save it to the database
+    image = CoverImage(data=base64_string)
+    db.session.add(image)
+    db.session.commit()
 
 @functions.route("add_school/select", methods=["GET","POST"])
 def select_school():
