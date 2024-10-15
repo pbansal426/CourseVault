@@ -4,19 +4,20 @@
 
 
 {% block content %}
-<div class="container p-5">
+
+<div class="container p-5 text-center"><h1 class="mb-5">Your Courses</h1><div class="row">
     {% for course in courses %}
-    <div class="card mt-3">
-        <div class="card-header">
-            {{ course.title }}
-        </div>
-        <div class="card-body">
-            <p>{{ course.description }}</p>
-            
-            <a href="{{url_for('views.course')}}" class="btn btn-primary">View Course</a>
-        </div>
-    </div>
-    {% endfor %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <img src="data:image/png;base64,{{ course.cover }}" class="card-img-top" alt="Course Cover Image">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <p class="card-text">{{ course.description }}</p>
+                        <a href="{{ url_for('views.course', id=course.id) }}" class="btn btn-primary mt-auto">View Course</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}</div>
 </div>    
     
 

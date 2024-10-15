@@ -37,6 +37,7 @@ def add_school():
 @login_required
 @views.route("/upload",methods=["POST","GET"])
 def upload():
+    
     if current_user.user_type != "instructor":
         flash("You must be an instructor to upload a course.", category="error")
         return redirect(url_for("views.home"))
@@ -51,17 +52,20 @@ def upload():
 
             
             course = Course(title=title, description=description, instructor_id=current_user.id)
-            course.cover_image_data = base64.b64encode(cover_image.read()).decode('utf-8')
+            course.cover = base64.b64encode(cover_image.read()).decode('utf-8')
             
             
                 
             for video_title, video_file in zip(video_titles, video_files):
                 video = Video(title=video_title, course=course)
-                video.video_file_data = base64.b64encode(video_file.read()).decode('utf-8')
+                video.file = base64.b64encode(video_file.read()).decode('utf-8')
                 db.session.add(video)
 
             db.session.add(course)
             db.session.commit()
+            
+
+            return redirect(url_for("views.course",id=course.id))
 
 
 
@@ -78,6 +82,8 @@ def courses_info():
     return render_template("courses_info.html",courses=courses)
 
 
-@views.route("/course")
-def course():
-    return render_template("course.html",current_user=current_user)
+@views.route("/course<int:id>")
+def course(id):
+    videos = Video.query.filter_by(course_id=id).all()
+    course = Course.query.filter_by(id=id).first()
+    return render_template("course.html",current_user=current_user,course=course,videos=videos)

@@ -44,6 +44,7 @@ class Course(db.Model):
     
     videos = db.relationship('Video', backref='course')
     cover = db.Column(db.Text)
+    price = db.Column(db.Integer)
     def __repr__(self):
         return f'<Course {self.title}>'
     
@@ -56,10 +57,3 @@ class Video(db.Model):
     def __repr__(self):
         return f'<Video {self.title}>'
     
-
-class CoverImage(db.Model):
-    __tablename__="cover_image"
-    id = db.Column(db.Integer,primary_key=True)
-    data = db.Column(db.Text)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-    course = db.relationship('Course', backref='image')
