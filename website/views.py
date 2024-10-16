@@ -86,4 +86,5 @@ def courses_info():
 def course(id):
     videos = Video.query.filter_by(course_id=id).all()
     course = Course.query.filter_by(id=id).first()
-    return render_template("course.html",current_user=current_user,course=course,videos=videos)
+    instructor = Instructor.query.filter_by(id=course.instructor_id).first()
+    return render_template("course.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
