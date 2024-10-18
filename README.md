@@ -34,12 +34,15 @@ I might use OLLAMA, or an OPEN-AI API-Link
 
 HOW TO RUN:
 in terminal:
-if pipenv is already install skip this step: run "pip3 install pipenv"
+if poetry is already install skip this step: run "pipx install poetry"
 run the following commands:
-"pipenv shell"
-"pipenv install"
+"poetry shell"
+"poetry install"
 "python3 main.py"
 then command/ctrl click on the localhost link
+or go to 
+http://127.0.0.1:5000
+
 
 https://github.com/pbansal426/CourseVault
 

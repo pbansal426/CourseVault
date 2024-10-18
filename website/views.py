@@ -87,4 +87,7 @@ def course(id):
     videos = Video.query.filter_by(course_id=id).all()
     course = Course.query.filter_by(id=id).first()
     instructor = Instructor.query.filter_by(id=course.instructor_id).first()
-    return render_template("course.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    if current_user.user_type=="instructor":
+        return render_template("course_preview.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    else:
+        pass

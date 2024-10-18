@@ -1,0 +1,61 @@
+{% extends "base.html" %} 
+
+{% block title %}Home{% endblock %} 
+
+
+{% block content %}
+<style>
+  .bg {
+      /* Background pattern from Toptal Subtle Patterns */
+      background-image: url("data:image/*;base64,{{course.cover}}");
+      
+    
+      
+
+   }
+   
+
+</style>
+<div class="bg">
+<div class="container p-5">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h1 class="card-title">{{course.title}}</h1>
+            <p class="card-text">{{instructor.name}}</p>
+          </div>
+          <div class="card-body">
+            <div class="course-description" id="description-toggle">
+              <p>{{course.description}}</p>
+              <a href="#" class="read-more d-inline-block"><i class="fa-solid fa-caret-down"></i></a>
+            </div>
+            <video src="" id="video-player">
+
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center p-3">
+          <h2 class="card-title">Video List</h2>
+          <ol class="list-group list-group-flush list-group-numbered">
+            {% for video in videos %}
+            
+            <li class="list-group-item">{{videos.loop0}}<button class="btn btn-light btn-block" onClick="setVideoFile({{video.file}})">{{video.title}}</button></li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+  <script>
+    const player = document.getElementById("video-player")
+    function setVideoFile(file){
+      player.src=file;
+    }
+  </script>
+{% endblock %}
+    

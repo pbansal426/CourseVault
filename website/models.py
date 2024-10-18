@@ -48,6 +48,9 @@ class Course(db.Model):
     def __repr__(self):
         return f'<Course {self.title}>'
     
+class CompletionManager(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    
 class Video(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
