@@ -5,10 +5,21 @@
 
 {% block content %}
 <style>
+  .video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  video {
+    width: 80%;
+    height: auto;
+  }
   .bg {
       /* Background pattern from Toptal Subtle Patterns */
       background-image: url("data:image/*;base64,{{course.cover}}");
-      
+      background-size:cover;
+      height:fit-content;
     
       
 
@@ -28,11 +39,11 @@
           <div class="card-body">
             <div class="course-description" id="description-toggle">
               <p>{{course.description}}</p>
-              <a href="#" class="read-more d-inline-block"><i class="fa-solid fa-caret-down"></i></a>
+              <p>{{course.price_value}}</p>
             </div>
-            <video src="" id="video-player">
-
-            </video>
+            <div class="video-container">
+              <video id="videoPlayer" controls></video>
+            </div>
           </div>
         </div>
       </div>
@@ -42,7 +53,7 @@
           <ol class="list-group list-group-flush list-group-numbered">
             {% for video in videos %}
             
-            <li class="list-group-item">{{videos.loop0}}<button class="btn btn-light btn-block" onClick="setVideoFile({{video.file}})">{{video.title}}</button></li>
+            <li class="list-group-item"><button class="btn btn-light btn-block">{{video.title}}</button></li>
             {% endfor %}
           </ol>
         </div>
@@ -52,10 +63,20 @@
 
 </div>
   <script>
-    const player = document.getElementById("video-player")
-    function setVideoFile(file){
-      player.src=file;
+    const videoPlayer = document.getElementById('videoPlayer');
+
+    // Function to play a video from a base64 string
+    function playVideo(base64String) {
+      videoPlayer.src = `data:video/mp4;base64,${base64String}`;
+      videoPlayer.play();
     }
+
+    // Example usage:
+    const button1 = document.getElementById('button1');
+    button1.addEventListener('click', () => {
+      const base64Video1 = 'YOUR_BASE64_STRING_HERE';
+      playVideo(base64Video1);
+    });
   </script>
 {% endblock %}
     

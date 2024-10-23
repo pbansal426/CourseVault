@@ -49,9 +49,10 @@ def upload():
             cover_image = request.files['cover_image']
             video_titles = request.form.getlist('videoTitle[]')
             video_files = request.files.getlist('videoFiles[]')
-
+            price = float(request.form.get("price"))
             
-            course = Course(title=title, description=description, instructor_id=current_user.id)
+            
+            course = Course(title=title, description=description, instructor_id=current_user.id,price_value=price)
             course.cover = base64.b64encode(cover_image.read()).decode('utf-8')
             
             

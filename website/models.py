@@ -44,7 +44,8 @@ class Course(db.Model):
     
     videos = db.relationship('Video', backref='course')
     cover = db.Column(db.Text)
-    price = db.Column(db.Integer)
+    price_value = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
+    price_string = db.Column(db.String())
     def __repr__(self):
         return f'<Course {self.title}>'
     

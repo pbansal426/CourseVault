@@ -40,3 +40,29 @@ def create_user(usr_type,**kwargs):
         return Student(user_type=usr_type,**kwargs)
     else:
         raise ValueError("Invalid user type")
+    
+
+def format_price(number):
+  """Formats a number into proper price notation with dollar sign and commas.
+
+  Args:
+    number: The number to format.
+
+  Returns:
+    The formatted price string.
+  """
+
+  # Convert the number to a string
+  number_str = str(number)
+
+  # Split the number into integer and decimal parts
+  integer_part, decimal_part = number_str.split('.') if '.' in number_str else (number_str, '00')
+
+  # Format the integer part with commas
+  integer_part = '{:,}'.format(int(integer_part))
+
+  # Combine the parts and add the dollar sign
+  formatted_price = f'${integer_part}.{decimal_part}'
+
+  return formatted_price
+
