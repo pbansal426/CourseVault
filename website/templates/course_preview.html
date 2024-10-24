@@ -32,9 +32,9 @@
     <div class="row">
       <div class="col-md-8">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header text-center">
             <h1 class="card-title">{{course.title}}</h1>
-            <p class="card-text">{{instructor.name}}</p>
+            <p class="card-text text-primary">{{instructor.name}}</p>
           </div>
           <div class="card-body">
             <div class="course-description" id="description-toggle">
@@ -42,7 +42,9 @@
               <p>{{course.price_value}}</p>
             </div>
             <div class="video-container">
-              <video id="videoPlayer" controls></video>
+              <video id="videoPlayer" controls>
+                
+              </video>
             </div>
           </div>
         </div>
@@ -53,7 +55,7 @@
           <ol class="list-group list-group-flush list-group-numbered">
             {% for video in videos %}
             
-            <li class="list-group-item"><button class="btn btn-light btn-block">{{video.title}}</button></li>
+            <li class="list-group-item"><button onClick="playVideo({{video.file}})" class="btn btn-light btn-block">{{video.title}}</button></li>
             {% endfor %}
           </ol>
         </div>
@@ -71,12 +73,7 @@
       videoPlayer.play();
     }
 
-    // Example usage:
-    const button1 = document.getElementById('button1');
-    button1.addEventListener('click', () => {
-      const base64Video1 = 'YOUR_BASE64_STRING_HERE';
-      playVideo(base64Video1);
-    });
+    
   </script>
 {% endblock %}
     

@@ -18,8 +18,8 @@ def home():
         
         return render_template("home.html",current_user=current_user)
     else:
-        
-        return render_template("cover.html",current_user=current_user)
+        courses=Course.query.all()
+        return render_template("cover.html",current_user=current_user,courses=courses)
     
 
 @views.route("/students-info")
