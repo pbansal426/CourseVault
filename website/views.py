@@ -21,7 +21,7 @@ def home():
         courses=Course.query.all()
         return render_template("cover.html",current_user=current_user,courses=courses)
     
-
+ 
 @views.route("/students-info")
 def students_info():
     return render_template("students-info.html")

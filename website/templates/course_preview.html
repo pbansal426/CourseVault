@@ -39,11 +39,12 @@
           <div class="card-body">
             <div class="course-description" id="description-toggle">
               <p>{{course.description}}</p>
-              <p>{{course.price_value}}</p>
+              <p>${{course.price_value}}</p>
             </div>
             <div class="video-container">
-              <video id="videoPlayer" controls>
-                
+              <video id="myVideo" controls>
+                <source src="data:video/mp4;base64,YOUR_BASE64_ENCODED_VIDEO_STRING" type="video/mp4">
+
               </video>
             </div>
           </div>
@@ -56,6 +57,10 @@
             {% for video in videos %}
             
             <li class="list-group-item"><button onClick="playVideo({{video.file}})" class="btn btn-light btn-block">{{video.title}}</button></li>
+            <video id="myVideo" controls>
+              <source src="data:video/mp4;base64,{{video.file}}" type="video/mp4">
+
+            </video>
             {% endfor %}
           </ol>
         </div>
@@ -65,12 +70,11 @@
 
 </div>
   <script>
-    const videoPlayer = document.getElementById('videoPlayer');
+    const videoPlayer = document.getElementById('myVideo');
 
     // Function to play a video from a base64 string
     function playVideo(base64String) {
-      videoPlayer.src = `data:video/mp4;base64,${base64String}`;
-      videoPlayer.play();
+      videoPlayer.innerHTML = "<source src='data:video/mp4;base64,"+base64String+"' type='video/mp4'>"
     }
 
     
