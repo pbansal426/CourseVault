@@ -1,7 +1,6 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% block title %}Home{% endblock %} 
-
+{% block title %}Home{% endblock %}
 
 {% block content %}
 <style>
@@ -12,23 +11,19 @@
     height: 100vh;
   }
   video {
-    width: 80%;
+    width: 100%;
     height: auto;
   }
   .bg {
       /* Background pattern from Toptal Subtle Patterns */
       background-image: url("data:image/*;base64,{{course.cover}}");
-      background-size:cover;
-      height:fit-content;
-    
-      
-
-   }
-   
-
+      background-size: cover;
+      height: fit-content;
+  }
 </style>
+
 <div class="bg">
-<div class="container p-5">
+  <div class="container p-5">
     <div class="row">
       <div class="col-md-8">
         <div class="card">
@@ -41,10 +36,9 @@
               <p>{{course.description}}</p>
               <p>${{course.price_value}}</p>
             </div>
-            <div class="video-container">
+            <div>
               <video id="myVideo" controls>
-                <source src="data:video/mp4;base64,YOUR_BASE64_ENCODED_VIDEO_STRING" type="video/mp4">
-
+                <source src="data:video/mp4;base64,{{ videos[0].file }}" type="video/mp4">
               </video>
             </div>
           </div>
@@ -55,29 +49,30 @@
           <h2 class="card-title">Video List</h2>
           <ol class="list-group list-group-flush list-group-numbered">
             {% for video in videos %}
-            
-            <li class="list-group-item"><button onClick="playVideo({{video.file}})" class="btn btn-light btn-block">{{video.title}}</button></li>
-            <video id="myVideo" controls>
-              <source src="data:video/mp4;base64,{{video.file}}" type="video/mp4">
-
-            </video>
+            <li class="list-group-item">
+              <button class="btn btn-light btn-block play-video-btn" data-video-file="{{ video.file }}">{{video.title}}</button>
+            </li>
             {% endfor %}
           </ol>
         </div>
       </div>
     </div>
   </div>
-
 </div>
-  <script>
-    const videoPlayer = document.getElementById('myVideo');
 
-    // Function to play a video from a base64 string
-    function playVideo(base64String) {
-      videoPlayer.innerHTML = "<source src='data:video/mp4;base64,"+base64String+"' type='video/mp4'>"
-    }
+<script>
+  const videoPlayer = document.getElementById('myVideo');
 
-    
-  </script>
+  function playVideo(event) {
+    const clickedButton = event.target;
+    const videoFile = clickedButton.dataset.videoFile;
+    videoPlayer.innerHTML = `<source src="data:video/mp4;base64,${videoFile}" type="video/mp4">`;
+  }
+
+  const playVideoButtons = document.querySelectorAll('.play-video-btn');
+
+  playVideoButtons.forEach(button => {
+    button.addEventListener('click', playVideo);
+  });
+</script>
 {% endblock %}
-    
