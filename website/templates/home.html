@@ -6,7 +6,20 @@
 
 Type of user: {{current_user.user_type}}
     {% if current_user.user_type == 'student' %}
-    
+    <h1 class="text-center">Browse Courses</h1>
+        <div class="text-center"><h1 class="mb-5"></h1><div class="row">
+            {% for course in courses %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <img src="data:image/png;base64,{{ course.cover }}" class="card-img-top" alt="Course Cover Image">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title mt-auto">{{ course.title }}</h5>
+                                <p class="card-text mt-auto">{{ course.description }}</p>
+                                <a href="{{ url_for('views.course', id=course.id) }}" class="btn btn-primary mt-auto">View Course</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}</div>
     {% else %}
     
     {% endif %}

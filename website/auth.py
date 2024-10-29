@@ -134,7 +134,8 @@ def signup():
                     password=hash,
                     question=question,
                     answer=answer,
-                    name=name
+                    name=name,
+                    courses=[]
                     
                 )
                 

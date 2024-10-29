@@ -15,8 +15,8 @@ views = Blueprint("views",__name__)
 def home():
     if current_user.is_authenticated:
 
-        
-        return render_template("home.html",current_user=current_user)
+        courses=Course.query.all()
+        return render_template("home.html",current_user=current_user,courses=courses)
     else:
         courses=Course.query.all()
         return render_template("cover.html",current_user=current_user,courses=courses)
@@ -88,7 +88,19 @@ def course(id):
     videos = Video.query.filter_by(course_id=id).all()
     course = Course.query.filter_by(id=id).first()
     instructor = Instructor.query.filter_by(id=course.instructor_id).first()
-    if current_user.user_type=="instructor":
-        return render_template("course_preview.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    
+    return render_template("course_preview.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    
+
+@views.route("/progress")
+def progress():
+    if current_user.is_authenticated == False:
+        flash("To view your progress, please log-in.",category="error")
+        return redirect(url_for("auth.login",future='views.progress'))
+    
+    elif current_user.user_type == "instructor":
+        flash("You are an instructor. Here are the courses you have uploaded.",category="error")
+        return redirect(url_for("views.courses_info"))
     else:
-        pass
+        print(type(current_user.courses))
+        return render_template("progress.html",current_user=current_user)

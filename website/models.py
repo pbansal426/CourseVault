@@ -21,7 +21,7 @@ class User(db.Model, UserMixin):
 
 class StandardUser(User):
     __tablename__ = 'standard_user'
-    
+    courses = db.relationship("Course")
 
 class Instructor(User):
     
@@ -33,7 +33,7 @@ class Student(User):
     __tablename__ = 'student'
     
     school_id = db.Column(db.Integer())
-
+    courses = db.relationship("Course")
 
 class Course(db.Model):
     __tablename__ = 'courses'
