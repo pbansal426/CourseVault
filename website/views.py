@@ -33,6 +33,8 @@ def add_school():
                 
         schools = School.query.all()
         return render_template("add_school.html", schools=schools)
+    else:
+        return redirect(url_for("views.home"))
 
 @login_required
 @views.route("/upload",methods=["POST","GET"])
@@ -63,8 +65,9 @@ def upload():
                 db.session.add(video)
 
             db.session.add(course)
-            db.session.commit()
             
+            db.session.commit()
+            print(current_user.user_type)
 
             return redirect(url_for("views.course",id=course.id))
 
