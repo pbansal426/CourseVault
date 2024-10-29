@@ -27,7 +27,7 @@ class User(db.Model, UserMixin):
     
 class StandardUser(User):
     __tablename__ = 'standard_user'
-    courses = db.relationship('Course', secondary=course_purchases, backref='purchased_by')
+    courses = db.relationship("Course")
 
 class Instructor(User):
     
