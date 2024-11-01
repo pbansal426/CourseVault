@@ -5,9 +5,20 @@
 <br>
 
 Type of user: {{current_user.user_type}}
+<<<<<<< HEAD
     {% if current_user.user_type == 'student' %}
     <h1 class="text-center">Browse Courses</h1>
         <div class="text-center"><h1 class="mb-5"></h1><div class="row">
+=======
+{% if current_user.user_type == "instructor" %}
+{% for course in current_user.courses_taught %}
+{{course}}
+{% endfor %}
+{% endif %}
+    {% if current_user.user_type != 'instructor' %}
+    <h1 class="text-center">Browse Courses</h1>
+        <div class="text-center"><div class="row">
+>>>>>>> b90d147 (Minimal Viable Product)
             {% for course in courses %}
                     <div class="col-md-4 mb-3">
                         <div class="card h-100">
