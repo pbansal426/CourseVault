@@ -27,7 +27,7 @@ class Instructor(User):
     
     
     resume=db.Column(db.String(150000000))
-    courses = db.relationship('Course', backref='taught_by')
+    courses_taught = db.relationship('Course', backref='taught_by')
 
 class Student(User):
     __tablename__ = 'student'

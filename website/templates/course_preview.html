@@ -23,6 +23,7 @@
 </style>
 
 <div class="bg">
+  <div style="background-color: rgba(0, 0, 0, 0.56);">
   <div class="container p-5">
     <div class="row">
       <div class="col-md-8">
@@ -53,7 +54,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-center p-3">
-          <h2 class="card-title">Video List</h2>
+          <h2 class="card-title">Course Videos</h2>
           <ol class="list-group list-group-flush list-group-numbered">
             {% for video in videos %}
             <li class="list-group-item">
@@ -65,7 +66,7 @@
       </div>
     </div>
   </div>
-</div>
+</div></div>
 
 <script>
   const videoPlayer = document.getElementById('myVideo');
