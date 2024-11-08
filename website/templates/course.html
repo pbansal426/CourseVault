@@ -38,7 +38,7 @@
               <p>${{course.price_value}}</p>
               {% if current_user.is_authenticated %}
               {% if current_user.user_type!="instructor"%}
-              <button class="btn btn-primary">Purchase {% if current_user.user_type == "student"%}for FREE!{% endif %} </button>
+              <button onClick="purchaseCourse({{course.id}})" class="btn btn-primary">Purchase {% if current_user.user_type == "student"%}for FREE!{% endif %} </button>
               <br><br>
               {% endif %}
               
