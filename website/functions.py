@@ -34,6 +34,16 @@ def select_school():
 
     return jsonify({})
 
+@functions.route("course/purchase",methods = ["GET","POST"])
+def purchase_course():
+    course = json.loads(request.data)
+    course_id = course["id"]
+    course = Course.query.get(course_id)
+    
+    current_user.courses.append(course)
+    print(current_user.courses)
+    return jsonify({})
+
 
 def create_user(usr_type, **kwargs):
     if usr_type == "standard_user":
