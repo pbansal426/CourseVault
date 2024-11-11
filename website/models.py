@@ -38,7 +38,7 @@ class Student(User):
     __tablename__ = 'student'
     
     school_id = db.Column(db.Integer())
-    courses = db.relationship('Course', secondary=course_purchases, backref='purchased_by')
+    #courses = db.relationship('Course', secondary=course_purchases, backref='purchased_by')
 
 class Course(db.Model):
     __tablename__ = 'courses'
@@ -46,7 +46,7 @@ class Course(db.Model):
     title = db.Column(db.String(100), nullable=False)   
     description = db.Column(db.Text)
     instructor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    purchased_by = db.relationship('User', secondary=course_purchases, backref='courses')
+    #purchased_by = db.relationship('User', secondary=course_purchases, backref='courses')
     videos = db.relationship('Video', backref='course')
     cover = db.Column(db.Text)
     price_value = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
