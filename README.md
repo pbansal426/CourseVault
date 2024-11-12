@@ -48,7 +48,10 @@ https://github.com/pbansal426/CourseVault
 
 
 
-
+Timeline:
+1: Finish SQL models
+2: Completion managers for users
+3: if possible, add AI chatbot for courses.
 
 
 
