@@ -35,7 +35,7 @@
           <div class="card-body">
             <div class="course-description" id="description-toggle">
               <p>{{course.description}}</p>
-              <p>${{course.price_value}}</p>
+              <p>${{course.price}}</p>
               {% if current_user.is_authenticated %}
               {% if current_user.user_type!="instructor"%}
               <button onClick="purchaseCourse({{course.id}})" class="btn btn-primary">Purchase {% if current_user.user_type == "student"%}for FREE!{% endif %} </button>

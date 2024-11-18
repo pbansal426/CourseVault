@@ -13,7 +13,9 @@ views = Blueprint("views",__name__)
 @views.route("/")
 @views.route("/home")
 def home():
-    if current_user.is_authenticated:
+    #print(current_user)
+    print(type(current_user))
+    if current_user:
 
         courses=Course.query.all()
         return render_template("home.html",current_user=current_user,courses=courses)
@@ -97,7 +99,7 @@ def course(id):
 
 @views.route("/progress")
 def progress():
-    if current_user.is_authenticated == False:
+    if current_user.is_authenticated is False:
         flash("To view your progress, please log-in.",category="error")
         return redirect(url_for("auth.login",future='views.progress'))
     

@@ -26,10 +26,11 @@ def select_school():
 
     school = json.loads(request.data)
     school_id = school["id"]
-    school = School.query.get(school_id)
+
 
     current_user.user_type = "student"
-    current_user.school = school
+    current_user.school_id = school_id
+    school.students.append(current_user)
     db.session.commit()
 
     return jsonify({})
