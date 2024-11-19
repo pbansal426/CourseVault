@@ -4,6 +4,7 @@ from .models import *
 from werkzeug.utils import secure_filename
 import os
 import base64
+from .functions import *
 from io import BytesIO
 from PIL import Image
 views = Blueprint("views",__name__)
@@ -14,8 +15,8 @@ views = Blueprint("views",__name__)
 @views.route("/home")
 def home():
     #print(current_user)
-    print(type(current_user))
-    if current_user:
+    
+    if current_user.is_authenticated:
 
         courses=Course.query.all()
         return render_template("home.html",current_user=current_user,courses=courses)
@@ -56,7 +57,7 @@ def upload():
             price = float(request.form.get("price"))
             
             
-            course = Course(title=title, description=description, instructor_id=current_user.id,price_value=price)
+            course = Course(title=title, description=description, instructor_id=current_user.id,price=price,string_price=format_price(price))
             course.cover = base64.b64encode(cover_image.read()).decode('utf-8')
             
             

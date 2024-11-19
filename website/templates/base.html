@@ -165,7 +165,19 @@
         window.location.href = "{{url_for('views.home')}}";
       });
     }
-
+    function formatPrice(price) {
+      // Convert the price to a string and split it into integer and decimal parts
+      const priceStr = price.toString().split('.');
+    
+      // Format the integer part with commas for thousands separators
+      const integerPart = priceStr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
+      // Format the decimal part with two decimal places, adding leading zeros if necessary
+      const decimalPart = (priceStr[1] || '00').padStart(2, '0');
+    
+      // Combine the formatted integer and decimal parts, adding a decimal point
+      return `$${integerPart}.${decimalPart}`;
+    }
     function purchaseCourse(id) {
       fetch("{{url_for('functions.purchase_course')}}", {
         method: "POST",
