@@ -5,9 +5,13 @@
     
 <br>
 
+{% if current_user.user_type == "student" %}
 
+{{current_user.school_id}}
+{% endif %}
 {% if current_user.user_type == "instructor" %}
-{% for course in current_user.courses_taught %}
+
+{% for course in current_user.courses %}
 {{course}}
 {% endfor %}
 {% endif %}

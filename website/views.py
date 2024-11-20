@@ -19,7 +19,16 @@ def home():
     if current_user.is_authenticated:
 
         courses=Course.query.all()
-        return render_template("home.html",current_user=current_user,courses=courses)
+        if current_user.user_type == "student":
+            print(type(current_user))
+            return render_template("home.html",current_user=current_user,courses=courses)
+        elif current_user.user_type == "instructor":
+            pass
+
+
+        
+        else:
+            return render_template("home.html",current_user=current_user,courses=courses)
     else:
         courses=Course.query.all()
         return render_template("cover.html",current_user=current_user,courses=courses)

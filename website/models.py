@@ -8,6 +8,7 @@ class School(db.Model):
     name = db.Column(db.String(10000))
     zip_code = db.Column(db.Integer())
     email=db.Column(db.String(1000))
+    students = db.relationship("Student", backref="school")
 
 class User(db.Model, UserMixin):
 
@@ -21,19 +22,15 @@ class User(db.Model, UserMixin):
 
 class StandardUser(User):
     __tablename__ = 'standard_user'
-    
     courses = db.relationship("Course")
 
 class Instructor(User):
-
-
     resume=db.Column(db.String(150000000))
-    courses = db.relationship('Course', backref='taught_by')
+    courses_taught = db.relationship('Course', backref='taught_by')
 
 class Student(User):
     __tablename__ = 'student'
-
-    school_id = db.Column(db.Integer())
+    school_id = db.Column(db.Integer(), db.ForeignKey('school.id'),nullable = False)
     courses = db.relationship("Course")
 
 class Course(db.Model):
@@ -42,7 +39,6 @@ class Course(db.Model):
     title = db.Column(db.String(100), nullable=False)   
     description = db.Column(db.Text)
     instructor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
     videos = db.relationship('Video', backref='course')
     cover = db.Column(db.Text)
     price = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
@@ -56,18 +52,7 @@ class Video(db.Model):
     title = db.Column(db.String(100), nullable=False)
     file = db.Column(db.String(255))
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
-
     def __repr__(self):
         return f'<Video {self.title}>'
     
-class Enrollment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    course = db.Column(db.Integer, db.ForeignKey('course.id'))
 
-
-user_courses = db.relationship(
-    Course,
-    secondary='enrollment',
-    backref=db.backref('enrolled_users', lazy='dynamic'),
-)
