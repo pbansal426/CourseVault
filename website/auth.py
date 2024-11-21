@@ -79,7 +79,7 @@ def instructor_signup():
                 password=hash,
                 question=question,
                 answer=answer,
-                name=name
+                name=name,resume=resume
                 )
             
             

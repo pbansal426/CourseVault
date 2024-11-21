@@ -23,7 +23,7 @@ def home():
             print(type(current_user))
             return render_template("home.html",current_user=current_user,courses=courses)
         elif current_user.user_type == "instructor":
-            pass
+            return render_template("home.html",current_user=current_user)
 
 
         
@@ -41,12 +41,11 @@ def students_info():
 
 @views.route("/add-school")
 def add_school():
-    if (current_user.user_type == "standard_user"):
+    
                 
-        schools = School.query.all()
-        return render_template("add_school.html", schools=schools)
-    else:
-        return redirect(url_for("views.home"))
+    schools = School.query.all()
+    return render_template("add_school.html", schools=schools)
+    
 
 @login_required
 @views.route("/upload",methods=["POST","GET"])

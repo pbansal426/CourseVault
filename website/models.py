@@ -4,6 +4,7 @@ from sqlalchemy.sql import func
 import base64
 
 class School(db.Model):
+    __tablename__ = "school"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10000))
     zip_code = db.Column(db.Integer())
@@ -19,10 +20,10 @@ class User(db.Model, UserMixin):
     question = db.Column(db.String(150000))
     answer = db.Column(db.String(100000))
     user_type = db.Column(db.Enum('student', 'instructor', 'standard_user'), nullable=False)
-
+    courses = db.relationship("Course")
 class StandardUser(User):
     __tablename__ = 'standard_user'
-    courses = db.relationship("Course")
+    
 
 class Instructor(User):
     resume=db.Column(db.String(150000000))
@@ -30,8 +31,8 @@ class Instructor(User):
 
 class Student(User):
     __tablename__ = 'student'
-    school_id = db.Column(db.Integer(), db.ForeignKey('school.id'),nullable = False)
-    courses = db.relationship("Course")
+    school_id = db.Column(db.Integer(), db.ForeignKey('school.id'))
+    
 
 class Course(db.Model):
     __tablename__ = 'course'

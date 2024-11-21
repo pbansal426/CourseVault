@@ -37,10 +37,19 @@
             <p>Be sure to register as a student.</p>
         </div>
         {% else %}
+        {% if current_user.user_type != "student" %}
         <div class="text-center p-2">
         To register as a student, click <a href="{{url_for('views.add_school')}}">here</a>.
         </div>
-        {% endif %}
+        {% else %}
+        <div class="cols">
+        <div class="col text-center p-2">
+          To change your school, click <a href="{{url_for('views.add_school')}}">here</a>.
+          </div>
+          <div class="col text-center p-2">
+            To unenroll from your school, click <a href="{{url_for('views.add_school')}}">here</a>.
+            </div>
+        {% endif %}</div>{% endif %}
           
         </div>
       </div>

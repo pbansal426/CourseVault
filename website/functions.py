@@ -26,15 +26,16 @@ def select_school():
 
     data = json.loads(request.data)
     school_id = data["id"]
-    print("hi")
+
     school = School.query.get(school_id)
     
     current_user.user_type = "student"
     current_user.school_id = school_id
+    school.students.append(current_user)
     
-    print(school.students)
     db.session.commit()
-
+    print(school.students)
+    print(current_user.school_id)
     return jsonify({})
 
 @functions.route("course/purchase",methods = ["GET","POST"])
@@ -42,9 +43,9 @@ def purchase_course():
     course = json.loads(request.data)
     course_id = course["id"]
     course = Course.query.get(course_id)
-    
-    current_user.courses.append(course)
-    print(current_user.courses)
+    user = User.query.get(current_user.id)
+    user.courses.append(course)
+    print(user.courses)
     return jsonify({})
 
 
