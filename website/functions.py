@@ -38,15 +38,18 @@ def select_school():
     print(current_user.school_id)
     return jsonify({})
 
-@functions.route("course/purchase",methods = ["GET","POST"])
+@functions.route("course/enroll",methods = ["GET","POST"])
 def purchase_course():
     course = json.loads(request.data)
     course_id = course["id"]
     course = Course.query.get(course_id)
-    user = User.query.get(current_user.id)
-    user.courses.append(course)
-    print(user.courses)
-    return jsonify({})
+    if course not in current_user.courses:
+        current_user.enroll_in_course(course)
+        flash(f"You have successfully enrolled in {course.title}!", 'success')
+    else:
+        flash(f"You are already enrolled in {course.title}.", 'warning')
+
+    return redirect(url_for('course', id=course.id))
 
 
 def create_user(usr_type, **kwargs):
@@ -85,3 +88,5 @@ def format_price(number):
     formatted_price = f"${integer_part}.{decimal_part}"
 
     return formatted_price
+
+
