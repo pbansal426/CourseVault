@@ -23,19 +23,19 @@ def save_image(image_file):
 
 @functions.route("add_school/select", methods=["GET", "POST"])
 def select_school():
+    
 
     data = json.loads(request.data)
     school_id = data["id"]
-
+    user = User.query.get(current_user.id)
     school = School.query.get(school_id)
-    
-    current_user.user_type = "student"
-    current_user.school_id = school_id
-    school.students.append(current_user)
-    
+    user.user_type = "student"
+    student = Student(**user.__dict__)
+    student.school = school
+    db.session.delete(user)
+    db.session.add(student)
     db.session.commit()
-    print(school.students)
-    print(current_user.school_id)
+    
     return jsonify({})
 
 @functions.route("course/enroll",methods = ["GET","POST"])
