@@ -19,24 +19,113 @@ def save_image(image_file):
     image = CoverImage(data=base64_string)
     db.session.add(image)
     db.session.commit()
+@functions.route("add_school/unenroll",methods=["GET","POST"])
+def unenroll():
+    try:
+        # Fetch the current user
+        user = User.query.get(current_user.id)
 
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+
+        if user.user_type != "student":
+            return jsonify({"error": "Only students can unenroll from a school."}), 400
+
+        # Handle the school association removal
+        school = None
+        if hasattr(user, 'school') and user.school:
+            school = user.school
+            user.school = None
+
+        # Transition the user back to a StandardUser
+        user.user_type = "standard_user"
+
+        # Remove the Student-specific attributes if necessary
+        # (No additional action needed if attributes are managed via relationships)
+
+        db.session.commit()
+
+        if school:
+            return jsonify({"message": f"{user.name} has unenrolled from {school.name} and is now a standard user."}), 200
+        else:
+            flash("You are now unenrolled. You are no longer a student.", category = "success")
+            return redirect(url_for("views.home"))
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 @functions.route("add_school/select", methods=["GET", "POST"])
 def select_school():
-    
+    try:
+        # Parse the incoming data
+        data = json.loads(request.data)
+        school_id = data.get("id")
+        
+        # Fetch the current user
+        user = User.query.get(current_user.id)
+        
+        if not user:
+            return jsonify({"error": "User not found"}), 404
 
-    data = json.loads(request.data)
-    school_id = data["id"]
-    user = User.query.get(current_user.id)
-    school = School.query.get(school_id)
-    user.user_type = "student"
-    student = Student(**user.__dict__)
-    student.school = school
-    db.session.delete(user)
-    db.session.add(student)
-    db.session.commit()
-    
-    return jsonify({})
+        if not school_id:
+            return jsonify({"error": "School ID is required"}), 400
+        
+        # Fetch the selected school
+        school = School.query.get(school_id)
+        if not school:
+            return jsonify({"error": "School not found"}), 404
+
+        # Case 1: Standard user enrolling in a school
+        if user.user_type == "standard_user":
+            user.user_type = "student"  # Change user type to "student"
+
+            # Filter user attributes to remove SQLAlchemy internals
+            user_dict = {key: value for key, value in user.__dict__.items() if not key.startswith('_')}
+
+            # Create a new Student instance
+            student = Student(
+                id=user.id,  # Preserve the original ID
+                email=user.email,
+                name=user.name,
+                password=user.password,
+                question=user.question,
+                answer=user.answer,
+                user_type='student'  # Set user_type explicitly
+            )
+            student.school = school  # Assign the selected school
+
+            db.session.delete(user)  # Remove the standard user record
+            db.session.commit()
+            db.session.add(student)  # Add the new student record
+
+            message = f"{student.name} has enrolled in {school.name} and is now a student."
+            print(student)
+            db.session.commit()
+            login_user(student)
+            db.session.refresh(student)
+        # Case 2: Existing student transferring to a different school
+        elif user.user_type == "student":
+            student = Student.query.get(user.id)  # Fetch the existing student record
+            if not student:
+                return jsonify({"error": "Student record not found"}), 404
+
+            student.school = school  # Change the school assignment
+            message = f"{student.name} has transferred to {school.name}."
+
+        # Case 3: Unsupported user type
+        else:
+            return jsonify({"error": "Only standard users and students can select a school."}), 400
+
+        # Commit the changes to the database
+        db.session.commit()
+        return jsonify({"message": message}), 200
+
+    except Exception as e:
+        # Roll back the transaction in case of errors
+        db.session.rollback()
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
 
 @functions.route("course/enroll",methods = ["GET","POST"])
 def purchase_course():

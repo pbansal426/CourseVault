@@ -20,7 +20,9 @@ def home():
 
         courses=Course.query.all()
         if current_user.user_type == "student":
-            print(type(current_user))
+            
+
+            print(current_user.school_id)
             return render_template("home.html",current_user=current_user,courses=courses)
         elif current_user.user_type == "instructor":
             return render_template("home.html",current_user=current_user)

@@ -39,7 +39,7 @@
                 </div>
         {% else %}
         
-        <h4>Please <a href="{{url_for('auth.login')}}">login</a> to add a school to your account.</h4>
+        <h4>Please <a href="{{url_for('auth.login',future='views.add_school')}}">login</a> to add a school to your account.</h4>
         <h4>If you don't have an account, <a href="{{url_for('auth.signup')}}">sign up.</a></h4>
 
         {% endif %}

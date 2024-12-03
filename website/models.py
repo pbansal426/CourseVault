@@ -2,7 +2,6 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-
 # Association table for many-to-many relationship between User and Course
 user_courses = db.Table(
     'user_courses',
@@ -10,7 +9,6 @@ user_courses = db.Table(
     db.Column('course_id', db.Integer, db.ForeignKey('course.id'), primary_key=True),
     db.Column('enrollment_date', db.DateTime, default=func.now())
 )
-
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -22,6 +20,12 @@ class User(db.Model, UserMixin):
     answer = db.Column(db.String(1000), nullable=True)
     user_type = db.Column(db.Enum('student', 'instructor', 'standard_user'), nullable=False)
 
+    # Polymorphic configuration
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': user_type
+    }
+
     # Relationship to courses via the association table
     courses = db.relationship('Course', secondary=user_courses, back_populates='users')
 
@@ -29,7 +33,6 @@ class User(db.Model, UserMixin):
         if course not in self.courses:
             self.courses.append(course)
             db.session.commit()
-
 
 class School(db.Model):
     __tablename__ = "school"
@@ -39,22 +42,33 @@ class School(db.Model):
     email = db.Column(db.String(255), nullable=False)
     students = db.relationship("Student", back_populates="school")
 
-
 class Student(User):
-    __mapper_args__ = {'polymorphic_identity': 'student'}
+    __tablename__ = 'student'
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
     school = db.relationship("School", back_populates="students")
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'student'
+    }
 
 class Instructor(User):
-    __mapper_args__ = {'polymorphic_identity': 'instructor'}
+    __tablename__ = 'instructor'
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     resume = db.Column(db.Text, nullable=True)
     courses_taught = db.relationship('Course', back_populates='instructor')
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'instructor'
+    }
 
 class StandardUser(User):
-    __mapper_args__ = {'polymorphic_identity': 'standard_user'}
+    __tablename__ = 'standard_user'
+    id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'standard_user'
+    }
 
 class Course(db.Model):
     __tablename__ = 'course'
@@ -70,7 +84,6 @@ class Course(db.Model):
 
     def __repr__(self):
         return f'<Course {self.title}>'
-
 
 class Video(db.Model):
     __tablename__ = 'video'
