@@ -1721,6 +1721,16 @@ files = [
 tests = ["pytest", "pytest-cov"]
 
 [[package]]
+name = "timedelta"
+version = "2020.12.3"
+description = "datetime.timedelta replacement"
+optional = false
+python-versions = "*"
+files = [
+    {file = "timedelta-2020.12.3.tar.gz", hash = "sha256:41c28b314de9cb6e4c95fcc9f4e3ecee435f2fc821a079cd9243be4783ac4cf4"},
+]
+
+[[package]]
 name = "tokenizers"
 version = "0.20.3"
 description = ""
@@ -2097,4 +2107,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "4d51a5a415b36f0e066592d2b0d9602f9b98f52e2b0bb72197c982f3db5d1446"
+content-hash = "5b1371e90624c17cc6062d6c16d17afc3f3797132f8ff982ad5545b170fa8620"

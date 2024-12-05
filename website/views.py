@@ -14,10 +14,10 @@ views = Blueprint("views",__name__)
 @views.route("/")
 @views.route("/home")
 def home():
-    #print(current_user)
+    
     
     if current_user.is_authenticated:
-
+        print("Authenticated at views.home"+current_user.user_type,current_user)
         courses=Course.query.all()
         if current_user.user_type == "student":
             

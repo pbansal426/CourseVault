@@ -4,7 +4,7 @@ import json
 from flask_login import login_user, login_required, logout_user, current_user
 from . import db
 from .functions import *
-
+from sqlalchemy.orm import joinedload
 functions = Blueprint("functions", __name__)
 import base64
 from flask_sqlalchemy import SQLAlchemy
@@ -61,7 +61,7 @@ def select_school():
         # Parse the incoming data
         data = json.loads(request.data)
         school_id = data.get("id")
-        
+        print("omg")
         # Fetch the current user
         user = User.query.get(current_user.id)
         
@@ -78,12 +78,10 @@ def select_school():
 
         # Case 1: Standard user enrolling in a school
         if user.user_type == "standard_user":
+            print("if statements")
             user.user_type = "student"  # Change user type to "student"
-
-            # Filter user attributes to remove SQLAlchemy internals
-            user_dict = {key: value for key, value in user.__dict__.items() if not key.startswith('_')}
-
-            # Create a new Student instance
+            print("a")
+            # Transition user attributes to student-specific ones
             student = Student(
                 id=user.id,  # Preserve the original ID
                 email=user.email,
@@ -93,27 +91,28 @@ def select_school():
                 answer=user.answer,
                 user_type='student'  # Set user_type explicitly
             )
+            print("b")
             student.school = school  # Assign the selected school
-
-            db.session.delete(user)  # Remove the standard user record
+            print('c')
+            # Save the updated student data
+            db.session.add(student)
+            print("d")
+            db.session.delete(user)
+            print("delete")  # Remove the standard user record
             db.session.commit()
-            db.session.add(student)  # Add the new student record
-
+            print("Checkpoint")
+            login_user(student)  # Log in the student
             message = f"{student.name} has enrolled in {school.name} and is now a student."
-            print(student)
-            db.session.commit()
-            login_user(student)
-            db.session.refresh(student)
+
         # Case 2: Existing student transferring to a different school
         elif user.user_type == "student":
-            student = Student.query.get(user.id)  # Fetch the existing student record
+            student = Student.query.options(joinedload(Student.school)).get(user.id)
             if not student:
                 return jsonify({"error": "Student record not found"}), 404
 
             student.school = school  # Change the school assignment
             message = f"{student.name} has transferred to {school.name}."
 
-        # Case 3: Unsupported user type
         else:
             return jsonify({"error": "Only standard users and students can select a school."}), 400
 
@@ -125,7 +124,6 @@ def select_school():
         # Roll back the transaction in case of errors
         db.session.rollback()
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-
 
 @functions.route("course/enroll",methods = ["GET","POST"])
 def purchase_course():

@@ -22,20 +22,40 @@ def login(future):
         email = request.form.get("email")
         password = request.form.get("password")
         user = User.query.filter_by(email=email).first()
-
-        if user:
-            # Check if the password matches using bcrypt
-            if bcrypt.checkpw(password.encode('utf-8'), user.password):
-                flash('Logged in successfully!', category='success')
-                login_user(user, remember=True)
-                
-                # Redirect to future page or default to home
-                return redirect(url_for(future) if future else url_for('views.home'))
-            else:
-                flash('Incorrect password, try again.', category='error')
-        else:
+        
+        if not user:
             flash('Email does not exist.', category='error')
+            return render_template("login.html")
 
+        print(f"User found: {user}, Type: {user.user_type}")
+
+        # Re-query to load the correct polymorphic subclass
+        if user.user_type == 'student':
+            user = Student.query.get(user.id)
+        elif user.user_type == 'instructor':
+            user = Instructor.query.get(user.id)
+        elif user.user_type == 'standard_user':
+            user = StandardUser.query.get(user.id)
+        
+        print(f"Logging in as: {user}, Subclass type: {type(user)}")
+
+        # Check password match
+        if bcrypt.checkpw(password.encode('utf-8'), user.password):
+
+            flash('Logged in successfully!', category='success')
+            login_user(user, remember=True)
+
+            if current_user.is_authenticated:
+                print(f"User authenticated: {current_user}")
+            else:
+                print("Authentication failed!")
+
+            return redirect(url_for(future) if future else url_for('views.home'))
+
+        else:
+            flash('Incorrect password, try again.', category='error')
+            print("Password mismatch!")
+        
     return render_template("login.html")
 
 @auth.route('/logout')
