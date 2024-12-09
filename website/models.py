@@ -81,9 +81,11 @@ class Course(db.Model):
     cover = db.Column(db.String(255), nullable=True)
     price = db.Column(db.Numeric(precision=10, scale=2), nullable=False)
     users = db.relationship('User', secondary=user_courses, back_populates='courses')
+    string_price = db.Column(db.String(50), nullable=True)  # Add this column
 
     def __repr__(self):
         return f'<Course {self.title}>'
+
 
 class Video(db.Model):
     __tablename__ = 'video'

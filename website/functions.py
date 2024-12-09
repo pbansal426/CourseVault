@@ -46,7 +46,8 @@ def unenroll():
         db.session.commit()
 
         if school:
-            return jsonify({"message": f"{user.name} has unenrolled from {school.name} and is now a standard user."}), 200
+            return redirect(url_for("views.home"))
+        
         else:
             flash("You are now unenrolled. You are no longer a student.", category = "success")
             return redirect(url_for("views.home"))
@@ -62,9 +63,9 @@ def select_school():
         data = json.loads(request.data)
         school_id = data.get("id")
         print("omg")
+
         # Fetch the current user
         user = User.query.get(current_user.id)
-        
         if not user:
             return jsonify({"error": "User not found"}), 404
 
@@ -79,9 +80,13 @@ def select_school():
         # Case 1: Standard user enrolling in a school
         if user.user_type == "standard_user":
             print("if statements")
-            user.user_type = "student"  # Change user type to "student"
-            print("a")
-            # Transition user attributes to student-specific ones
+
+            # Delete the user first to clear the `id` in the table
+            db.session.delete(user)
+            db.session.commit()  # Commit the deletion
+            print("User deleted.")
+
+            # Create the new Student object
             student = Student(
                 id=user.id,  # Preserve the original ID
                 email=user.email,
@@ -89,19 +94,18 @@ def select_school():
                 password=user.password,
                 question=user.question,
                 answer=user.answer,
-                user_type='student'  # Set user_type explicitly
+                user_type='student',
+                school=school  # Assign the selected school
             )
             print("b")
-            student.school = school  # Assign the selected school
-            print('c')
-            # Save the updated student data
+
+            # Add the student object to the session
             db.session.add(student)
-            print("d")
-            db.session.delete(user)
-            print("delete")  # Remove the standard user record
-            db.session.commit()
-            print("Checkpoint")
-            login_user(student)  # Log in the student
+            db.session.commit()  # Commit the new student
+            print("Checkpoint: Student created successfully.")
+
+            # Log in the newly created student
+            login_user(student)
             message = f"{student.name} has enrolled in {school.name} and is now a student."
 
         # Case 2: Existing student transferring to a different school
@@ -111,18 +115,17 @@ def select_school():
                 return jsonify({"error": "Student record not found"}), 404
 
             student.school = school  # Change the school assignment
+            db.session.commit()
             message = f"{student.name} has transferred to {school.name}."
 
         else:
             return jsonify({"error": "Only standard users and students can select a school."}), 400
 
-        # Commit the changes to the database
-        db.session.commit()
         return jsonify({"message": message}), 200
 
     except Exception as e:
-        # Roll back the transaction in case of errors
-        db.session.rollback()
+        db.session.rollback()  # Roll back the session to prevent a half-committed state
+        print(f"An error occurred: {e}")
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 @functions.route("course/enroll",methods = ["GET","POST"])
