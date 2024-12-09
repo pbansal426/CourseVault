@@ -128,18 +128,29 @@ def select_school():
         print(f"An error occurred: {e}")
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
-@functions.route("course/enroll",methods = ["GET","POST"])
+@functions.route("course/enroll", methods=["POST"])
 def purchase_course():
-    course = json.loads(request.data)
-    course_id = course["id"]
-    course = Course.query.get(course_id)
-    if course not in current_user.courses:
-        current_user.enroll_in_course(course)
-        flash(f"You have successfully enrolled in {course.title}!", 'success')
-    else:
-        flash(f"You are already enrolled in {course.title}.", 'warning')
+    try:
+        course_data = json.loads(request.data)
+        course_id = course_data.get("id")
 
-    return redirect(url_for('course', id=course.id))
+        if not course_id:
+            return jsonify({"message": "Course ID is required."}), 400
+
+        course = Course.query.get(course_id)
+
+        if not course:
+            return jsonify({"message": "Course not found."}), 404
+
+        if course not in current_user.courses:
+            current_user.enroll_in_course(course)
+            db.session.commit()
+            return jsonify({"message": f"You have successfully enrolled in {course.title}!"}), 200
+        else:
+            return jsonify({"message": f"You are already enrolled in {course.title}."}), 200
+
+    except Exception as e:
+        return jsonify({"message": f"An error occurred: {str(e)}"}), 500
 
 
 def create_user(usr_type, **kwargs):

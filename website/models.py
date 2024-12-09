@@ -7,8 +7,10 @@ user_courses = db.Table(
     'user_courses',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('course_id', db.Integer, db.ForeignKey('course.id'), primary_key=True),
-    db.Column('enrollment_date', db.DateTime, default=func.now())
+    db.Column('enrollment_date', db.DateTime, default=func.now()),
+    db.Column('purchase_date', db.DateTime, nullable=True)  # Add purchase_date column
 )
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
