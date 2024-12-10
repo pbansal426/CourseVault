@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Instructor Course Preview{% endblock %}
+
+{% block content %}
+<style>
+  /* Ensure the background covers the full screen */
+  .bg {
+    background-image: url("data:image/*;base64,{{course.cover}}");
+    background-size: cover;
+    background-position: center center; /* Center the image */
+    height: 100vh; /* Full screen height */
+    width: 100%; /* Full screen width */
+    position: relative; /* Allows positioning the overlay */
+  }
+
+  /* Semi-transparent overlay that stretches the whole screen */
+  .overlay {
+    position: absolute; /* Position it absolutely inside the .bg container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.56); /* Semi-transparent black background */
+  }
+
+  .video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+  }
+
+  .locked-video {
+    background-color: #f0f0f0;
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    color: #888;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+
+  .locked-video .lock-icon {
+    font-size: 50px;
+    color: #ff6f61;
+  }
+</style>
+
+<div class="bg">
+  <!-- Full screen overlay -->
+  <div class="overlay"></div>
+
+  <div class="container p-5" style="position: relative; z-index: 1;">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header text-center">
+            <h1 class="card-title">{{course.title}}</h1>
+            <p class="card-text text-primary">{{instructor.name}}</p>
+          </div>
+          <div class="card-body">
+            <div class="p-2 course-description" id="description-toggle">
+              <p>{{course.description}}</p>
+              <p>${{course.price}}</p>
+              <button class="btn btn-warning" onClick="editCourse({{course.id}})">Edit Course</button>
+              <button class="btn btn-danger" onClick="deleteCourse({{course.id}})">Delete Course</button>
+            </div>
+
+            <div>
+              <video id="myVideo" controls>
+                <source src="data:video/mp4;base64,{{ videos[0].file }}" type="video/mp4">
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center p-3">
+          <h2 class="card-title">Course Videos</h2>
+          <ol class="list-group list-group-flush list-group-numbered">
+            {% for video in videos %}
+            <li class="list-group-item">
+              <button class="btn btn-light btn-block play-video-btn" data-video-file="{{ video.file }}">{{video.title}}</button>
+            </li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const videoPlayer = document.getElementById('myVideo');
+
+  function playVideo(event) {
+    const clickedButton = event.target;
+    const videoFile = clickedButton.dataset.videoFile;
+    videoPlayer.innerHTML = `<source src="data:video/mp4;base64,${videoFile}" type="video/mp4">`;
+  }
+
+  const playVideoButtons = document.querySelectorAll('.play-video-btn');
+
+  playVideoButtons.forEach(button => {
+    button.addEventListener('click', playVideo);
+  });
+
+  // Functions for edit and delete
+  function editCourse(courseId) {
+    window.location.href = `/edit-course/${courseId}`;
+  }
+
+  function deleteCourse(courseId) {
+    if (confirm("Are you sure you want to delete this course?")) {
+      // Add AJAX or redirect logic for deletion
+      window.location.href = `/delete-course/${courseId}`;
+    }
+  }
+</script>
+{% endblock %}

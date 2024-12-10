@@ -3,53 +3,20 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-    <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <script src="https://kit.fontawesome.com/e2210d7b25.js" crossorigin="anonymous"></script>
-  <script src="{{ url_for('static', filename='index.js')}}"</script></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}{% endblock %}</title>
-  <style>
-    /* Tooltip container */
-
-    /* Tooltip text */
-    .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 120px;
-      background-color: black;
-      color: #fff;
-      text-align: center;
-      padding: 5px 0;
-      border-radius: 6px;
-
-      /* Position the tooltip text - see examples below! */
-      position: absolute;
-      z-index: 1;
-    }
-
-    /* Show the tooltip text when you mouse over the tooltip container */
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://kit.fontawesome.com/e2210d7b25.js" crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='index.js') }}"></script> <!-- Your custom JS -->
 </head>
 
 <body>
-
-
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark m-0 p-0">
     <div class="container-fluid mx-2">
-      <a class="navbar-brand my-1" href="{{url_for('views.home')}}">
+      <a class="navbar-brand my-1" href="{{ url_for('views.home') }}">
         <img class="navbar-brand" src="/static/images/logo.png" alt="logo" width="150" height="auto" />
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -62,16 +29,12 @@
           <li class="nav-item">
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" type="button"
-                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                id="dropdownMenuButton" aria-expanded="false">
                 Browse
               </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li><a class="dropdown-item" href="#">Standardized Tests</a></li>
-                
-                <li>
-                  <a class="dropdown-item" href="#">Machine Learning</a>
-                </li>
-
+                <li><a class="dropdown-item" href="#">Machine Learning</a></li>
                 <li><a class="dropdown-item" href="#">Data Science</a></li>
                 <li><a class="dropdown-item" href="#">Cooking</a></li>
                 <li><a class="dropdown-item" href="#">Math</a></li>
@@ -95,116 +58,64 @@
         <ul class="navbar-nav ms-auto gap-2">
           {% if current_user.user_type == "instructor" %}
           <li class="nav-item rounded">
-            <a class="nav-link text-light" href="{{url_for('views.upload')}}">Upload a course</a>
+            <a class="nav-link text-light" href="{{ url_for('views.upload') }}">Upload a course</a>
           </li>
           <li class="nav-item rounded">
-            <a class="nav-link text-light" href="{{url_for('views.courses_info')}}">My Courses</a>
+            <a class="nav-link text-light" href="{{ url_for('views.courses_info') }}">My Courses</a>
           </li>
-
           {% else %}
           <li class="nav-item rounded">
-            <a class="nav-link text-light" href="{{url_for('views.students_info')}}">For Students</a>
+            <a class="nav-link text-light" href="{{ url_for('views.students_info') }}">For Students</a>
           </li>{% endif %}
           <li class="nav-item rounded">
-            <a class="nav-link text-light" href="{{url_for('auth.schoolsignup')}}">For Schools</a>
-
+            <a class="nav-link text-light" href="{{ url_for('auth.schoolsignup') }}">For Schools</a>
           </li>
 
           <li class="nav-item rounded">
-            <a class="nav-link text-light" href="{{url_for('views.progress')}}">
+            <a class="nav-link text-light" href="{{ url_for('views.progress') }}">
               <i class="fa-solid fa-list-check"></i></a>
           </li>
           {% if current_user.is_authenticated %}
           <li class="nav-item">
-            <a class="btn btn-danger" href="{{url_for('auth.logout')}}">Logout</a>
+            <a class="btn btn-danger" href="{{ url_for('auth.logout') }}">Logout</a>
           </li>
           {% else %}
-
           <li class="nav-item">
-            <a class="btn btn-outline-success" href="{{url_for('auth.login',future='views.home')}}">Login</a>
+            <a class="btn btn-outline-success" href="{{ url_for('auth.login', future='views.home') }}">Login</a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-success" href="{{url_for('auth.signup')}}">Sign-Up</a>
+            <a class="btn btn-success" href="{{ url_for('auth.signup') }}">Sign-Up</a>
           </li>
-
           {% endif %}
-
-          <!--           
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
-          </li> -->
         </ul>
       </div>
     </div>
   </nav>
-  {% with messages = get_flashed_messages(with_categories=true) %} {% if
-  messages %} {% for category, message in messages %} {% if category ==
-  'error' %}
-  <div class="alert alert-danger alter-dismissable fade show d-flex" role="alert">
-    {{ message }}
-    <button type="button" class="ms-auto btn-close" aria-label="Close" data-dismiss="alert">
-      <span aria-hidden="true"></span>
-    </button>
-  </div>
-  {% else %}
-  <div class="alert alert-success alter-dismissable fade show d-flex" role="alert">
-    {{ message }}
-    <button type="button" class="ms-auto btn-close" aria-label="Close" data-dismiss="alert">
-      <span aria-hidden="true"></span>
-    </button>
-  </div>
-  {% endif %} {% endfor %} {% endif %} {% endwith %}
-  <div class="container-fluid p-0 m-0" >{% block content %} {% endblock %}</div>
 
-  <script>
-    function selectSchool(id) {
-      fetch("{{url_for('functions.select_school')}}", {
-        method: "POST",
-        body: JSON.stringify({ id: id }),
-      }).then((_res) => {
-        window.location.href = "{{url_for('views.home')}}";
-      });
-    }
-    function formatPrice(price) {
-      // Convert the price to a string and split it into integer and decimal parts
-      const priceStr = price.toString().split('.');
-    
-      // Format the integer part with commas for thousands separators
-      const integerPart = priceStr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    
-      // Format the decimal part with two decimal places, adding leading zeros if necessary
-      const decimalPart = (priceStr[1] || '00').padStart(2, '0');
-    
-      // Combine the formatted integer and decimal parts, adding a decimal point
-      return `$${integerPart}.${decimalPart}`;
-    }
-    function purchaseCourse(id) {
-      console.log("diddy");
-      
-      // Sending POST request with proper headers
-      fetch("{{url_for('functions.purchase_course')}}", {
-          method: "POST",
-          headers: {
-              'Content-Type': 'application/json', // Important for the server to know the request body is JSON
-          },
-          body: JSON.stringify({ id: id })
-      })
-      .then(response => response.json())  // Handle the JSON response from the server
-      .then(data => {
-          // Assuming the server sends back a message, display it or handle it
-          if (data.message) {
-              alert(data.message);  // Show success or error message
-          }
-          // Redirect to the course page or the home page as necessary
-          window.location.href = "{{url_for('views.home')}}";  // Adjust the redirect if needed
-      })
-      .catch(error => {
-          console.error('Error enrolling in course:', error);
-      });
-  }
-  
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      {% if category == 'error' %}
+      <div class="alert alert-danger alert-dismissible fade show d-flex" role="alert">
+        {{ message }}
+        <button type="button" class="ms-auto btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
+      </div>
+      {% else %}
+      <div class="alert alert-success alert-dismissible fade show d-flex" role="alert">
+        {{ message }}
+        <button type="button" class="ms-auto btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
+      </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% endwith %}
 
-  </script>
+  <div class="container-fluid p-0 m-0">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

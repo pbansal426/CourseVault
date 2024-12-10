@@ -6,22 +6,23 @@
 <div class="container p-5">
     <h2 class="mb-4">Your Enrolled Courses</h2>
 
-    {% if current_user.courses|length > 0 %}
+    {% if progress_data|length > 0 %}
         <div class="list-group">
-            {% for course in current_user.courses %}
+            {% for data in progress_data %}
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="mb-1">{{ course.title }}</h5>
-                        <p class="mb-1">{{ course.description }}</p>
-                        <small>Instructor: {{ course.instructor.name }}</small>
+                        <h5 class="mb-1">{{ data.course.title }}</h5>
+                        <p class="mb-1">{{ data.course.description }}</p>
+                        <small>Instructor: {{ data.course.instructor.name }}</small>
                     </div>
                     
-                    <!-- Progress Bar Container -->
+                    <!-- Progress Bar -->
                     <div class="w-50">
                         <div class="progress" style="height: 20px;">
-                            <!-- Example: Replace 'progress_percentage' with the actual completion percentage -->
-                            <div class="progress-bar" role="progressbar" style="width: {{ course.progress_percentage }}%;" aria-valuenow="{{ course.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">
-                                {{ course.progress_percentage }}%
+                            <div class="progress-bar" role="progressbar" style="width: {{ data.progress_percentage }}%;" 
+                                aria-valuenow="{{ data.progress_percentage }}" 
+                                aria-valuemin="0" aria-valuemax="100">
+                                {{ data.progress_percentage }}%
                             </div>
                         </div>
                     </div>

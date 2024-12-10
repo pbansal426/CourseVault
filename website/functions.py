@@ -19,7 +19,7 @@ def save_image(image_file):
     image = CoverImage(data=base64_string)
     db.session.add(image)
     db.session.commit()
-@functions.route("add_school/unenroll",methods=["GET","POST"])
+@functions.route("add_school/unenroll", methods=["GET", "POST"])
 def unenroll():
     try:
         # Fetch the current user
@@ -35,9 +35,13 @@ def unenroll():
         school = None
         if hasattr(user, 'school') and user.school:
             school = user.school
-            user.school = None
+            user.school = None  # Disassociate the user from the school
+            
+            # Check if the user is in the school's students list and remove if present
+            if user in school.students:
+                school.students.remove(user)
 
-        # Transition the user back to a StandardUser
+        # Transition the user back to StandardUser
         user.user_type = "standard_user"
 
         # Remove the Student-specific attributes if necessary
@@ -45,15 +49,18 @@ def unenroll():
 
         db.session.commit()
 
-        if school:
-            return redirect(url_for("views.home"))
-        
-        else:
-            flash("You are now unenrolled. You are no longer a student.", category = "success")
-            return redirect(url_for("views.home"))
+        # Log out the current user
+        logout_user()
+
+        # Log in the updated StandardUser
+        login_user(user)
+
+        # Redirect to the home page after unenrollment
+        flash("You are now unenrolled and switched to a standard user.", category="success")
+        return redirect(url_for("views.home"))
 
     except Exception as e:
-        db.session.rollback()
+        db.session.rollback()  # Rollback if any errors occur
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 @functions.route("add_school/select", methods=["GET", "POST"])

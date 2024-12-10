@@ -16,6 +16,10 @@ regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 def is_email_taken(email):
     return User.query.filter_by(email=email).first() is not None
 
+from flask import request, redirect, url_for, flash, render_template
+from flask_login import login_user, current_user
+
+@auth.route("/login", defaults={"future": "views.home"}, methods=["GET", "POST"])
 @auth.route("/login/<future>", methods=["GET", "POST"])
 def login(future):
     if request.method == "POST":
@@ -41,16 +45,19 @@ def login(future):
 
         # Check password match
         if bcrypt.checkpw(password.encode('utf-8'), user.password):
-
             flash('Logged in successfully!', category='success')
             login_user(user, remember=True)
 
-            if current_user.is_authenticated:
-                print(f"User authenticated: {current_user}")
-            else:
-                print("Authentication failed!")
-
-            return redirect(url_for(future) if future else url_for('views.home'))
+            # Determine the target URL for redirection
+            if future:
+                return redirect(url_for(future))  # Redirect to the page defined in 'future'
+            
+            # If 'future' is not provided, redirect to the referrer (previous page)
+            if request.referrer:
+                return redirect(request.referrer)  # Redirect to the previous page
+            
+            # If no referrer, fallback to the home page
+            return redirect(url_for("views.home"))
 
         else:
             flash('Incorrect password, try again.', category='error')

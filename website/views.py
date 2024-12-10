@@ -107,16 +107,64 @@ def course(id):
     
     return render_template("course.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
     
+@views.route("/instructor_course<int:id>")
+def instructor_course(id):
+    videos = Video.query.filter_by(course_id=id).all()
+    course = Course.query.filter_by(id=id).first()
+    instructor = Instructor.query.filter_by(id=course.instructor_id).first()
+    
+    return render_template("instructor_course.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    
+@views.route("/course_preview<int:id>")
+def course_preview(id):
+    videos = Video.query.filter_by(course_id=id).all()
+    course = Course.query.filter_by(id=id).first()
+    instructor = Instructor.query.filter_by(id=course.instructor_id).first()
+    
+    return render_template("course_preview.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    
 
 @views.route("/progress")
+@login_required
 def progress():
-    if current_user.is_authenticated is False:
-        flash("To view your progress, please log-in.",category="error")
-        return redirect(url_for("auth.login",future='views.progress'))
-    
-    elif current_user.user_type == "instructor":
-        flash("You are an instructor. Here are the courses you have uploaded.",category="error")
+    if current_user.user_type == "instructor":
+        flash("You are an instructor. Here are the courses you have uploaded.", category="error")
         return redirect(url_for("views.courses_info"))
+    
+    # Calculate progress for each course
+    progress_data = []
+    for course in current_user.courses:
+        total_videos = len(course.videos)
+        watched_videos = VideoWatchEvent.query.filter_by(user_id=current_user.id, completed=True).filter(
+            VideoWatchEvent.video_id.in_([video.id for video in course.videos])
+        ).count()
+
+        progress_percentage = (watched_videos / total_videos) * 100 if total_videos > 0 else 0
+        progress_data.append({
+            "course": course,
+            "progress_percentage": round(progress_percentage)
+        })
+
+    return render_template("progress.html", progress_data=progress_data)
+
+@views.route("/video/mark_watched", methods=["POST"])
+@login_required
+def mark_video_watched():
+    data = request.get_json()
+    video_id = data.get("videoId")
+    if not video_id:
+        return jsonify({"error": "No video ID provided"}), 400
+
+    video = Video.query.get(video_id)
+    if not video:
+        return jsonify({"error": "Video not found"}), 404
+
+    watch_event = VideoWatchEvent.query.filter_by(user_id=current_user.id, video_id=video_id).first()
+    if not watch_event:
+        watch_event = VideoWatchEvent(user_id=current_user.id, video_id=video_id, completed=True)
+        db.session.add(watch_event)
     else:
-        print(type(current_user.courses))
-        return render_template("progress.html",current_user=current_user)
+        watch_event.completed = True
+
+    db.session.commit()
+    return jsonify({"success": True})

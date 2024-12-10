@@ -11,7 +11,6 @@ user_courses = db.Table(
     db.Column('purchase_date', db.DateTime, nullable=True)  # Add purchase_date column
 )
 
-
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -30,6 +29,7 @@ class User(db.Model, UserMixin):
 
     # Relationship to courses via the association table
     courses = db.relationship('Course', secondary=user_courses, back_populates='users')
+    video_watch_events = db.relationship('VideoWatchEvent', back_populates='user')
 
     def enroll_in_course(self, course):
         if course not in self.courses:
@@ -88,13 +88,24 @@ class Course(db.Model):
     def __repr__(self):
         return f'<Course {self.title}>'
 
-
 class Video(db.Model):
     __tablename__ = 'video'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     file = db.Column(db.String(255), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'))
+    watch_events = db.relationship('VideoWatchEvent', back_populates='video')
 
     def __repr__(self):
         return f'<Video {self.title}>'
+
+class VideoWatchEvent(db.Model):
+    __tablename__ = 'video_watch_event'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    video_id = db.Column(db.Integer, db.ForeignKey('video.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=func.now())
+    completed = db.Column(db.Boolean, default=False)
+
+    user = db.relationship('User', back_populates='video_watch_events')
+    video = db.relationship('Video', back_populates='watch_events')
