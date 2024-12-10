@@ -152,7 +152,7 @@ def purchase_course():
         if course not in current_user.courses:
             current_user.enroll_in_course(course)
             db.session.commit()
-            return jsonify({"message": f"You have successfully enrolled in {course.title}!"}), 200
+            return redirect(url_for('views.courses_info'))
         else:
             return jsonify({"message": f"You are already enrolled in {course.title}."}), 200
 

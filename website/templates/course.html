@@ -100,18 +100,6 @@
 </div>
 
 <script>
-  const videoPlayer = document.getElementById('myVideo');
-
-  function playVideo(event) {
-    const clickedButton = event.target;
-    const videoFile = clickedButton.dataset.videoFile;
-    videoPlayer.innerHTML = `<source src="data:video/mp4;base64,${videoFile}" type="video/mp4">`;
-  }
-
-  const playVideoButtons = document.querySelectorAll('.play-video-btn');
-
-  playVideoButtons.forEach(button => {
-    button.addEventListener('click', playVideo);
-  });
+  
 </script>
 {% endblock %}

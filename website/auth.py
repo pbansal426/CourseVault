@@ -15,18 +15,20 @@ regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 # Helper function to check if an email already exists
 def is_email_taken(email):
     return User.query.filter_by(email=email).first() is not None
+@auth.route("/login", methods=["GET", "POST"])
+def login():
+    # Redirect authenticated users to the home page
+    if current_user.is_authenticated:
+        return redirect(url_for("views.home"))
 
-from flask import request, redirect, url_for, flash, render_template
-from flask_login import login_user, current_user
+    # Get the "next" parameter from the query string
+    next_page = request.args.get('next')
 
-@auth.route("/login", defaults={"future": "views.home"}, methods=["GET", "POST"])
-@auth.route("/login/<future>", methods=["GET", "POST"])
-def login(future):
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
         user = User.query.filter_by(email=email).first()
-        
+
         if not user:
             flash('Email does not exist.', category='error')
             return render_template("login.html")
@@ -40,7 +42,7 @@ def login(future):
             user = Instructor.query.get(user.id)
         elif user.user_type == 'standard_user':
             user = StandardUser.query.get(user.id)
-        
+
         print(f"Logging in as: {user}, Subclass type: {type(user)}")
 
         # Check password match
@@ -48,23 +50,18 @@ def login(future):
             flash('Logged in successfully!', category='success')
             login_user(user, remember=True)
 
-            # Determine the target URL for redirection
-            if future:
-                return redirect(url_for(future))  # Redirect to the page defined in 'future'
-            
-            # If 'future' is not provided, redirect to the referrer (previous page)
-            if request.referrer:
-                return redirect(request.referrer)  # Redirect to the previous page
-            
-            # If no referrer, fallback to the home page
-            return redirect(url_for("views.home"))
-
+            # Redirect to the specified next page or fallback to referrer/home
+            if next_page:
+                return redirect(next_page)
+            elif request.referrer:
+                return redirect(request.referrer)
+            else:
+                return redirect(url_for("views.home"))
         else:
             flash('Incorrect password, try again.', category='error')
             print("Password mismatch!")
-        
-    return render_template("login.html")
 
+    return render_template("login.html")
 @auth.route('/logout')
 @login_required
 def logout():

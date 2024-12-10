@@ -82,7 +82,7 @@ def upload():
             db.session.commit()
             print(current_user.user_type)
 
-            return redirect(url_for("views.course",id=course.id))
+            return redirect(url_for("views.instructor_course",id=course.id))
 
 
 
@@ -117,8 +117,11 @@ def instructor_course(id):
     
 @views.route("/course_preview<int:id>")
 def course_preview(id):
+
     videos = Video.query.filter_by(course_id=id).all()
     course = Course.query.filter_by(id=id).first()
+    if current_user.is_authenticated == True and course.instructor_id == current_user.id:
+        return redirect(url_for('views.instructor_course',id=course.id))
     instructor = Instructor.query.filter_by(id=course.instructor_id).first()
     
     return render_template("course_preview.html",current_user=current_user,course=course,videos=videos,instructor=instructor)

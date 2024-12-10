@@ -81,7 +81,8 @@
           </li>
           {% else %}
           <li class="nav-item">
-            <a class="btn btn-outline-success" href="{{ url_for('auth.login', future='views.home') }}">Login</a>
+            <a class="btn btn-outline-success" href="{{ url_for('auth.login', next=url_for('views.home')) }}">Login</a>
+
           </li>
           <li class="nav-item">
             <a class="btn btn-success" href="{{ url_for('auth.signup') }}">Sign-Up</a>

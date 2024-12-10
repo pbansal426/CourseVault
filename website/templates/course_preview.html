@@ -67,13 +67,25 @@
           <div class="card-body">
             <div class="course-description" id="description-toggle">
               <p>{{course.description}}</p>
+              
               <p>${{course.price}}</p>
               {% if current_user.is_authenticated %}
-              {% if current_user.user_type == "student" %}
-              <button onClick="purchaseCourse({{course.id}})" class="btn btn-primary">Purchase for FREE</button>
-              <br><br>
-              {% endif %}
-              {% endif %}
+    {% if current_user.user_type == "student" %}
+        <!-- If the user is a student, show "Purchase for FREE" -->
+        <button onClick="purchaseCourse({{course.id}})" class="btn btn-primary">Purchase for FREE</button>
+    {% else %}
+        <!-- If the user is not a student, show "Purchase" button -->
+        <button onClick="purchaseCourse({{course.id}})" class="btn btn-primary">Purchase</button>
+    {% endif %}
+    <br><br>
+{% else %}
+    <!-- If the user is not logged in, show the login button -->
+    <a href="{{url_for('auth.login', next=url_for('views.course_preview', id=course.id))}}">
+        <button class="btn btn-success">Login to purchase this course.</button>
+    </a>
+    <br><br>
+{% endif %}
+
             </div>
 
             {% if current_user.is_authenticated and course.id in purchased_courses %}
@@ -117,7 +129,7 @@
   // Function to purchase course
   function purchaseCourse(courseId) {
     // Implement AJAX or redirect for purchasing logic
-    alert("Course purchased successfully!");
+    
     window.location.href = `/purchase-course/${courseId}`;
   }
 </script>
