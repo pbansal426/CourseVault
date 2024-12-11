@@ -44,10 +44,7 @@ def unenroll():
         # Transition the user back to StandardUser
         user.user_type = "standard_user"
 
-        # Remove the Student-specific attributes if necessary
-        # (No additional action needed if attributes are managed via relationships)
-
-        db.session.commit()
+        db.session.commit()  # Commit the changes to persist the user update
 
         # Log out the current user
         logout_user()
