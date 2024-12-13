@@ -66,7 +66,6 @@ def select_school():
         # Parse the incoming data
         data = json.loads(request.data)
         school_id = data.get("id")
-        print("omg")
 
         # Fetch the current user
         user = User.query.get(current_user.id)
@@ -83,44 +82,17 @@ def select_school():
 
         # Case 1: Standard user enrolling in a school
         if user.user_type == "standard_user":
-            print("if statements")
-
-            # Delete the user first to clear the `id` in the table
-            db.session.delete(user)
-            db.session.commit()  # Commit the deletion
-            print("User deleted.")
-
-            # Create the new Student object
-            student = Student(
-                id=user.id,  # Preserve the original ID
-                email=user.email,
-                name=user.name,
-                password=user.password,
-                question=user.question,
-                answer=user.answer,
-                user_type='student',
-                school=school  # Assign the selected school
-            )
-            print("b")
-
-            # Add the student object to the session
-            db.session.add(student)
-            db.session.commit()  # Commit the new student
-            print("Checkpoint: Student created successfully.")
-
-            # Log in the newly created student
-            login_user(student)
-            message = f"{student.name} has enrolled in {school.name} and is now a student."
+            # Convert the user into a Student
+            user.user_type = "student"
+            user.school = school  # Assign the selected school
+            db.session.commit()  # Commit the changes
+            message = f"{user.name} has enrolled in {school.name} and is now a student."
 
         # Case 2: Existing student transferring to a different school
         elif user.user_type == "student":
-            student = Student.query.options(joinedload(Student.school)).get(user.id)
-            if not student:
-                return jsonify({"error": "Student record not found"}), 404
-
-            student.school = school  # Change the school assignment
-            db.session.commit()
-            message = f"{student.name} has transferred to {school.name}."
+            user.school = school  # Update the school assignment
+            db.session.commit()  # Commit the changes
+            message = f"{user.name} has transferred to {school.name}."
 
         else:
             return jsonify({"error": "Only standard users and students can select a school."}), 400
@@ -149,7 +121,7 @@ def purchase_course():
         if course not in current_user.courses:
             current_user.enroll_in_course(course)
             db.session.commit()
-            return redirect(url_for('views.courses_info'))
+            return redirect(url_for('views.progress'))
         else:
             return jsonify({"message": f"You are already enrolled in {course.title}."}), 200
 

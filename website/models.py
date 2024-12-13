@@ -33,8 +33,13 @@ class User(db.Model, UserMixin):
 
     def enroll_in_course(self, course):
         if course not in self.courses:
+            print(f"Before append: {self.courses}")  # Debug statement
             self.courses.append(course)
+            db.session.add(self)  # Add user to the session for good measure
             db.session.commit()
+            db.session.refresh(self)  # Refresh to ensure changes are propagated
+            print(f"After append: {self.courses}")  # Debug statement
+
 
 class School(db.Model):
     __tablename__ = "school"

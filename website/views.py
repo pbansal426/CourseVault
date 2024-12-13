@@ -9,36 +9,39 @@ from io import BytesIO
 from PIL import Image
 views = Blueprint("views",__name__)
 
-
-@login_required
 @views.route("/")
 @views.route("/home")
+
 def home():
-    
-    
     if current_user.is_authenticated:
-        print("Authenticated at views.home"+current_user.user_type,current_user)
-        courses=Course.query.all()
+        print("Authenticated at views.home", current_user.user_type, current_user)
+        courses = Course.query.all()
+
         if current_user.user_type == "student":
-            
+            # Explicitly fetch the student record to ensure school_id is accessible
+            student = Student.query.get(current_user.id)  # Use `Student.query` to fetch the Student object
+            if student and student.school_id is not None:
+                print(f"Student is associated with school_id: {student.school_id}")
+            else:
+                print("No school_id found for the student.")
+            return render_template("home.html", current_user=current_user, courses=courses)
 
-            print(current_user.school_id)
-            return render_template("home.html",current_user=current_user,courses=courses)
         elif current_user.user_type == "instructor":
-            return render_template("home.html",current_user=current_user)
+            return redirect(url_for("views.courses_info"))
 
-
-        
         else:
-            return render_template("home.html",current_user=current_user,courses=courses)
-    else:
-        courses=Course.query.all()
-        return render_template("cover.html",current_user=current_user,courses=courses)
-    
- 
+            return render_template("home.html", current_user=current_user, courses=courses)
+
+    # If the user is not authenticated, show the cover page
+    courses = Course.query.all()
+    return render_template("cover.html", current_user=current_user, courses=courses)
+
 @views.route("/students-info")
 def students_info():
-    return render_template("students-info.html")
+    if current_user.user_type == "instructor":
+        return redirect(url_for('views.home'))
+    else:
+        return render_template("students-info.html")
 
 
 @views.route("/add-school")
@@ -103,9 +106,12 @@ def courses_info():
 def course(id):
     videos = Video.query.filter_by(course_id=id).all()
     course = Course.query.filter_by(id=id).first()
-    instructor = Instructor.query.filter_by(id=course.instructor_id).first()
     
-    return render_template("course.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    instructor = Instructor.query.filter_by(id=course.instructor_id).first()
+    if course in current_user.courses:
+        return render_template("course.html",current_user=current_user,course=course,videos=videos,instructor=instructor)
+    else:
+        return redirect(url_for("views.course_preview",id=course.id))
     
 @views.route("/instructor_course<int:id>")
 def instructor_course(id):
@@ -130,21 +136,22 @@ def course_preview(id):
 @views.route("/progress")
 @login_required
 def progress():
+    print(current_user.courses)
     if current_user.user_type == "instructor":
-        flash("You are an instructor. Here are the courses you have uploaded.", category="error")
+        
         return redirect(url_for("views.courses_info"))
     
     # Calculate progress for each course
     progress_data = []
-    for course in current_user.courses:
-        total_videos = len(course.videos)
+    for c in current_user.courses:
+        total_videos = len(c.videos)
         watched_videos = VideoWatchEvent.query.filter_by(user_id=current_user.id, completed=True).filter(
-            VideoWatchEvent.video_id.in_([video.id for video in course.videos])
+            VideoWatchEvent.video_id.in_([video.id for video in c.videos])
         ).count()
 
         progress_percentage = (watched_videos / total_videos) * 100 if total_videos > 0 else 0
         progress_data.append({
-            "course": course,
+            "course": c,  # Corrected here to use 'c' instead of 'course'
             "progress_percentage": round(progress_percentage)
         })
 

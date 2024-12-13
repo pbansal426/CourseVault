@@ -67,13 +67,6 @@
           <div class="card-body">
             <div class="course-description" id="description-toggle">
               <p>{{course.description}}</p>
-              <p>${{course.price}}</p>
-              {% if current_user.is_authenticated %}
-              {% if current_user.user_type!="instructor"%}
-              <button onClick="purchaseCourse({{course.id}})" class="btn btn-primary">Purchase {% if current_user.user_type == "student"%}for FREE!{% endif %}</button>
-              <br><br>
-              {% endif %}
-              {% endif %}
             </div>
             <div>
               <video id="myVideo" controls>
@@ -85,7 +78,7 @@
       </div>
       <div class="col-md-4">
         <div class="card text-center p-3">
-          <h2 class="card-title">Course Content</h2>
+          <h2 class="card-title">Course Videos</h2>
           <ol class="list-group list-group-flush list-group-numbered">
             {% for video in videos %}
             <li class="list-group-item">
@@ -100,6 +93,19 @@
 </div>
 
 <script>
-  
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoPlayer = document.getElementById('myVideo');
+    const videoSource = videoPlayer.querySelector('source');
+    const playButtons = document.querySelectorAll('.play-video-btn');
+
+    playButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const videoFile = button.getAttribute('data-video-file');
+        videoSource.setAttribute('src', `data:video/mp4;base64,${videoFile}`);
+        videoPlayer.load(); // Load the new video file
+        videoPlayer.play(); // Automatically play the new video
+      });
+    });
+  });
 </script>
 {% endblock %}

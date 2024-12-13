@@ -9,24 +9,30 @@
     {% if progress_data|length > 0 %}
         <div class="list-group">
             {% for data in progress_data %}
-                <div class="list-group-item d-flex justify-content-between align-items-center">
+                <a href="{{ url_for('views.course', id=data['course'].id) }}" 
+                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center mb-4" 
+                   style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ data['course'].cover_image }}'); 
+                          background-size: cover; background-position: center; color: white; text-decoration: none;">
+
+                    <!-- Course Details -->
                     <div>
-                        <h5 class="mb-1">{{ data.course.title }}</h5>
-                        <p class="mb-1">{{ data.course.description }}</p>
-                        <small>Instructor: {{ data.course.instructor.name }}</small>
+                        <h5 class="mb-1">{{ data['course'].title }}</h5>
+                        <p class="mb-1">{{ data['course'].description }}</p>
+                        <small>Instructor: {{ data['course'].instructor.name }}</small>
                     </div>
-                    
+
                     <!-- Progress Bar -->
                     <div class="w-50">
-                        <div class="progress" style="height: 20px;">
-                            <div class="progress-bar" role="progressbar" style="width: {{ data.progress_percentage }}%;" 
-                                aria-valuenow="{{ data.progress_percentage }}" 
-                                aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress" style="height: 20px; background: rgba(255, 255, 255, 0.2);">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: {{ data.progress_percentage }}%;" 
+                                 aria-valuenow="{{ data.progress_percentage }}" 
+                                 aria-valuemin="0" aria-valuemax="100">
                                 {{ data.progress_percentage }}%
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             {% endfor %}
         </div>
     {% else %}

@@ -67,8 +67,12 @@
           <div class="card-body">
             <div class="course-description" id="description-toggle">
               <p>{{course.description}}</p>
+              {%if current_user.user_type == 'student' %}
+              <s><p>${{course.price}}</p></s>
+              {% else %}<p>${{course.price}}</p>
+              {% endif %}
               
-              <p>${{course.price}}</p>
+
               {% if current_user.is_authenticated %}
     {% if current_user.user_type == "student" %}
         <!-- If the user is a student, show "Purchase for FREE" -->
@@ -125,13 +129,18 @@
   </div>
 </div>
 
+
 <script>
   // Function to purchase course
-  function purchaseCourse(courseId) {
-    // Implement AJAX or redirect for purchasing logic
-    
-    window.location.href = `/purchase-course/${courseId}`;
+  function purchaseCourse(id) {
+        
+    fetch("{{url_for('functions.purchase_course')}}", {
+      method: "POST",
+      body: JSON.stringify({ id: id }),
+    }).then((_res) => {
+      console.log("purchase complete")
+      window.location.href = "{{url_for('views.progress',id=course.id)}}";
+    });
   }
 </script>
-
 {% endblock %}
