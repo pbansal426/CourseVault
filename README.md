@@ -1,4 +1,7 @@
 # CourseVault
+
+
+
 Learning App
 Goal: This app helps people improve their skills by providing high-quality courses with a variety of learning topics. For the average person, the courses will have a small payment fee, but this is so the courses can be completely free for those in highschool or college.
 
