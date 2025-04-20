@@ -1,0 +1,64 @@
+{% extends "base.html" %} 
+
+{% block title %}Become an Instructor{% endblock %} 
+
+
+
+
+{% block content %}
+  <div class="container p-5">
+
+    <div class="justify-content-center text-center"></div>
+        
+        <div class="">
+            <div class="card">
+                <div   class="card-header">
+                    <h4 class="card-title text-center">Become an Instructor</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">  
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Must be unique"required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="What is you name?"required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password1" class="form-label">Create Password</label>
+                            <input type="password" class="form-control" id="password1" placeholder="Must contain at least 7 characters" name="password1" required>
+                        </div>
+                        <div class="mb-3">
+                            <label   for="password2" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="password2" name="password2" placeholder="Must match password above" required>
+                        </div>
+                        <div class="mb-3">
+                            <label   for="question" class="form-label">Security Question</label>
+                            <input type="text" class="form-control" id="question" name="question" placeholder="Ask a question only you know the answer to."required>
+                        </div>
+                        <div class="mb-3">
+                            <label   for="answer" class="form-label">Answer to security question</label>
+                            <input type="text" class="form-control" id="answer" name="answer" placeholder="Keep it simple. Try not to use punctuation" required>
+                        </div>
+                        <div class="mb-3">
+                            <label   for="resume" class="form-label text-primary">Tell us about yourself</label>
+                            <textarea type="text" class="form-control" id="answer" name="resume" placeholder="Job experience, education, expertise, etc." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                        Sign Up
+                        </button>  
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+</div>
+
+{% endblock %}
+    
